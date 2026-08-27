@@ -1,0 +1,122 @@
+.footer {
+  position: relative;
+  background: var(--navy-950);
+  border-top: 1px solid rgba(242, 234, 216, 0.08);
+  padding-top: clamp(80px, 12vh, 140px);
+  overflow: hidden;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(40px, 6vw, 100px);
+}
+
+.footer-invite h2 {
+  margin-top: 24px;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.5vw, 60px);
+  line-height: 1.15;
+  color: var(--cream);
+}
+
+.footer-invite em {
+  display: block;
+  color: var(--gold-bright);
+  font-size: 0.85em;
+  margin-top: 0.1em;
+}
+
+.footer-phone {
+  display: inline-block;
+  margin-top: 36px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 44px);
+  color: var(--cream);
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+.footer-phone:hover {
+  color: var(--gold-bright);
+}
+
+.footer-infos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px 30px;
+  align-content: start;
+}
+
+.footer-infos h3 {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.footer-infos p {
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--cream-dim);
+  font-size: 15px;
+}
+
+.footer-brand {
+  margin-top: clamp(60px, 10vh, 110px);
+  text-align: center;
+  overflow: hidden;
+  line-height: 0.9;
+  pointer-events: none;
+}
+
+.footer-brand .script {
+  display: inline-block;
+  font-size: clamp(90px, 18vw, 280px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(242, 234, 216, 0.22);
+  white-space: nowrap;
+  transform-origin: bottom center;
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: 26px;
+  border-top: 1px solid rgba(242, 234, 216, 0.08);
+  margin-top: -20px;
+}
+
+.footer-logo {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--cream-dim);
+}
+
+.footer-up {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+
+@media (max-width: 900px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Kaushan+Script&family=Jost:wght@300;400;500;600&display=swap");
+
+:root {
+  --navy-950: #060f18;
+  --navy-900: #0a1826;
+  --navy-800: #0e2233;
+  --navy-700: #14314a;
+  --navy-600: #1d4468;
+  --teal: #1691a0;
+  --teal-bright: #2fc4d4;
+  --gold: #c9a24b;
+  --gold-bright: #e6c47a;
+  --cream: #f2ead8;
+  --cream-dim: #d8cdb4;
+  --ink: #10151c;
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-script: "Kaushan Script", cursive;
+  --font-sans: "Jost", sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: var(--navy-900);
+  color: var(--cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--navy-950);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+}
+
+/* ---------- utilitaires ---------- */
+
+.container {
+  width: min(1280px, 92vw);
+  margin-inline: auto;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.section-label::before {
+  content: "";
+  width: 42px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+.script {
+  font-family: var(--font-script);
+  font-weight: 400;
+}
+
+/* barre de scroll discrète */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--navy-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--navy-600);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}

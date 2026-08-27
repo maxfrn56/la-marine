@@ -1,0 +1,82 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--navy-950);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vh, 40px);
+  overflow: hidden;
+}
+
+.preloader-logo {
+  width: clamp(110px, 16vh, 170px);
+  height: clamp(110px, 16vh, 170px);
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(201, 162, 75, 0.35);
+  z-index: 2;
+  animation: logo-float 4s ease-in-out infinite;
+}
+
+@keyframes logo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.preloader-words {
+  display: flex;
+  gap: 0.45em;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-style: italic;
+  z-index: 2;
+}
+
+.preloader-words .gold {
+  color: var(--gold-bright);
+  font-style: normal;
+}
+
+.preloader-count {
+  position: absolute;
+  bottom: 5vh;
+  right: 5vw;
+  font-family: var(--font-display);
+  font-size: clamp(64px, 10vw, 140px);
+  line-height: 1;
+  color: var(--cream);
+  opacity: 0.35;
+  font-variant-numeric: tabular-nums;
+  z-index: 2;
+}
+
+.preloader-wave {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.preloader-wave svg {
+  display: block;
+  width: 100%;
+  height: 90px;
+  transform: translateY(1px);
+}
+
+.preloader-wave-body {
+  position: absolute;
+  top: 89px;
+  left: 0;
+  right: 0;
+  height: 120vh;
+  background: var(--navy-700);
+}
