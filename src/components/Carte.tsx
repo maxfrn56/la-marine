@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   motion,
   useMotionValue,
@@ -98,6 +99,10 @@ export default function Carte() {
             </motion.li>
           ))}
         </ul>
+
+        <Link to="/carte" className="section-link">
+          Voir la carte complète <span aria-hidden>→</span>
+        </Link>
       </div>
 
       {/* aperçu du plat qui suit le curseur */}

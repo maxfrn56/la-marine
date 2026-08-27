@@ -1,0 +1,209 @@
+.carte-page {
+  background: var(--navy-900);
+  padding-bottom: clamp(80px, 12vh, 140px);
+}
+
+.carte-page-note {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  padding-block: 22px;
+  margin-inline: auto;
+  width: min(820px, 90vw);
+  border-block: 1px solid rgba(242, 234, 216, 0.12);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+}
+
+.carte-page-note i {
+  font-style: normal;
+  color: var(--gold);
+  font-size: 10px;
+}
+
+/* ---------- sections ---------- */
+
+.carte-page-section {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: clamp(30px, 5vw, 80px);
+  padding-block: clamp(60px, 10vh, 110px);
+}
+
+.carte-page-section--flip {
+  grid-template-columns: 1.5fr 1fr;
+}
+
+.carte-page-section--flip .carte-page-section-head {
+  order: 2;
+}
+
+.carte-page-sticky {
+  position: sticky;
+  top: 130px;
+}
+
+.carte-page-index {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--gold);
+}
+
+.carte-page-sticky h2 {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.5vw, 60px);
+  line-height: 1.08;
+  color: var(--cream);
+}
+
+.carte-page-sticky .script {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: clamp(20px, 2.2vw, 30px);
+  color: var(--gold-bright);
+  transform: rotate(-2deg);
+}
+
+.carte-page-items {
+  list-style: none;
+}
+
+.carte-page-items li {
+  padding-block: 26px;
+  border-bottom: 1px solid rgba(242, 234, 216, 0.1);
+}
+
+.carte-page-items li:first-child {
+  border-top: 1px solid rgba(242, 234, 216, 0.1);
+}
+
+.carte-page-item-line {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.carte-page-item-line h3 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 500;
+  color: var(--cream);
+  white-space: nowrap;
+}
+
+.carte-page-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(242, 234, 216, 0.35);
+  transform: translateY(-5px);
+}
+
+.carte-page-price {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: var(--gold-bright);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.carte-page-items p {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--cream-dim);
+  max-width: 52ch;
+}
+
+/* ---------- interlude photos ---------- */
+
+.carte-page-band {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(18px, 3vw, 44px);
+  padding-block: clamp(40px, 7vh, 80px);
+  background: var(--navy-950);
+  overflow: hidden;
+}
+
+.carte-page-band-img {
+  width: clamp(200px, 26vw, 380px);
+  aspect-ratio: 1;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.carte-page-band-img--small {
+  width: clamp(140px, 18vw, 260px);
+}
+
+.carte-page-band-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- mot du chef ---------- */
+
+.carte-page-chef {
+  margin-top: clamp(50px, 8vh, 90px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carte-page-chef .script {
+  font-size: clamp(26px, 3.4vw, 44px);
+  color: var(--cream);
+  max-width: 26ch;
+  line-height: 1.4;
+}
+
+.carte-page-chef > span {
+  margin-top: 18px;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.carte-page-cta {
+  margin-top: 40px;
+  padding: 16px 42px;
+  border-radius: 99px;
+  background: var(--gold);
+  color: var(--navy-950);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: background 0.3s ease, transform 0.4s var(--ease-out-expo);
+}
+
+.carte-page-cta:hover {
+  background: var(--gold-bright);
+  transform: translateY(-3px);
+}
+
+@media (max-width: 800px) {
+  .carte-page-section,
+  .carte-page-section--flip {
+    grid-template-columns: 1fr;
+  }
+  .carte-page-section--flip .carte-page-section-head {
+    order: 0;
+  }
+  .carte-page-sticky {
+    position: static;
+  }
+  .carte-page-item-line h3 {
+    white-space: normal;
+  }
+}

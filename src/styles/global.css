@@ -109,6 +109,30 @@ h3 {
   font-weight: 400;
 }
 
+/* lien fléché vers une page dédiée */
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+.section-link span {
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.section-link:hover span {
+  transform: translateX(8px);
+}
+
 /* barre de scroll discrète */
 ::-webkit-scrollbar {
   width: 10px;

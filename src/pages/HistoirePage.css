@@ -1,0 +1,144 @@
+.histoire-page {
+  background: var(--navy-900);
+  padding-bottom: clamp(80px, 12vh, 140px);
+}
+
+/* ---------- timeline ---------- */
+
+.histoire-page-timeline {
+  position: relative;
+  padding-block: clamp(40px, 7vh, 80px);
+}
+
+.histoire-page-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(242, 234, 216, 0.12);
+}
+
+.histoire-page-line-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--gold), var(--gold-bright));
+  transform-origin: top;
+  box-shadow: 0 0 18px rgba(201, 162, 75, 0.5);
+}
+
+.histoire-page-etape {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  padding-block: clamp(30px, 5vh, 60px);
+}
+
+.histoire-page-etape--right {
+  justify-content: flex-end;
+}
+
+.histoire-page-card {
+  width: min(44%, 520px);
+  padding-right: clamp(20px, 4vw, 60px);
+}
+
+.histoire-page-etape--right .histoire-page-card {
+  padding-right: 0;
+  padding-left: clamp(20px, 4vw, 60px);
+}
+
+.histoire-page-year {
+  font-size: clamp(44px, 6vw, 84px);
+  line-height: 1;
+  color: var(--gold-bright);
+}
+
+.histoire-page-card h2 {
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.8vw, 38px);
+  line-height: 1.2;
+  color: var(--cream);
+}
+
+.histoire-page-card p {
+  margin-top: 16px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--cream-dim);
+}
+
+.histoire-page-card figure {
+  margin-top: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.4);
+  transform: rotate(-1.5deg);
+}
+
+.histoire-page-etape--right .histoire-page-card figure {
+  transform: rotate(1.5deg);
+}
+
+.histoire-page-card img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+}
+
+.histoire-page-dot {
+  position: absolute;
+  top: clamp(46px, 7vh, 86px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--navy-900);
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 14px rgba(201, 162, 75, 0.55);
+}
+
+/* ---------- citation ---------- */
+
+.histoire-page-quote {
+  margin-top: clamp(60px, 9vh, 110px);
+  text-align: center;
+  padding-inline: 6vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.histoire-page-quote .script {
+  font-size: clamp(26px, 3.6vw, 48px);
+  color: var(--cream);
+  max-width: 30ch;
+  line-height: 1.45;
+}
+
+.histoire-page-quote span {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+@media (max-width: 800px) {
+  .histoire-page-line,
+  .histoire-page-dot {
+    left: 12px;
+  }
+  .histoire-page-etape,
+  .histoire-page-etape--right {
+    justify-content: flex-start;
+  }
+  .histoire-page-card,
+  .histoire-page-etape--right .histoire-page-card {
+    width: 100%;
+    padding-left: 44px;
+    padding-right: 0;
+  }
+}

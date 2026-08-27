@@ -10,6 +10,7 @@ import {
   animate,
 } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import facade from "../assets/photos/facade.png";
 import equipeSalle from "../assets/photos/equipe-salle.png";
 import "./Histoire.css";
@@ -114,6 +115,10 @@ export default function Histoire() {
             quartier devenu institution, où la sole arrive du bateau et où les
             cocktails se dégustent en terrasse, face aux chalutiers.
           </p>
+
+          <Link to="/histoire" className="section-link">
+            Toute notre histoire <span aria-hidden>→</span>
+          </Link>
 
           <motion.div
             className="histoire-team"

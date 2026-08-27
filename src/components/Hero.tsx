@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import salle from "../assets/photos/salle.png";
 import "./Hero.css";
@@ -75,9 +76,9 @@ export default function Hero({ started }: { started: boolean }) {
           <a href="tel:0297500981" className="hero-btn hero-btn--gold">
             Réserver une table
           </a>
-          <a href="#carte" className="hero-btn hero-btn--ghost">
+          <Link to="/carte" className="hero-btn hero-btn--ghost">
             Découvrir la carte
-          </a>
+          </Link>
         </motion.div>
       </motion.div>
 

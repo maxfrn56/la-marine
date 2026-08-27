@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import cocktailFraise from "../assets/photos/cocktail-fraise.png";
 import equipeBar from "../assets/photos/equipe-bar.png";
@@ -48,10 +49,10 @@ export default function Bar() {
             <li>Restauration au bar</li>
             <li>Cocktails signature</li>
           </ul>
-          <a href="tel:0297500981" className="bar-cta">
-            Réserver pour l’apéro
+          <Link to="/cocktails" className="bar-cta">
+            L’univers des cocktails
             <span aria-hidden>→</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

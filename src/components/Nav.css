@@ -94,6 +94,24 @@
   transform: translateY(-100%);
 }
 
+.nav-link--active {
+  position: relative;
+}
+
+.nav-link--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.nav-link--active span {
+  color: var(--gold-bright);
+}
+
 .nav-cta {
   display: flex;
   flex-direction: column;

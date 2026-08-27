@@ -1,0 +1,26 @@
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.page-curtain-body {
+  position: absolute;
+  inset: 0;
+  background: var(--navy-950);
+}
+
+.page-curtain svg {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 90px;
+}
+
+.page-curtain path {
+  fill: var(--navy-950);
+  transform: scaleY(-1);
+  transform-origin: center;
+}
