@@ -86,6 +86,17 @@
   white-space: nowrap;
 }
 
+.cocktails-state {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(30px, 6vh, 60px);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-style: italic;
+  color: var(--cream-dim);
+}
+
 /* ---------- liste signatures ---------- */
 
 .cocktails-list {

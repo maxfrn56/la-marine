@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Données du back-office (base, secret de session, photos envoyées)
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+server/data/.jwt-secret
+server/data/uploads/
+
+# Captures des scripts de vérification
+shot-*.png
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

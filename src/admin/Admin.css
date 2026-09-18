@@ -1,0 +1,647 @@
+.admin {
+  min-height: 100svh;
+  background: var(--navy-950);
+  padding-bottom: 12vh;
+}
+
+/* ---------- en-tête ---------- */
+
+.admin-head {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 16px min(4vw, 48px);
+  background: rgba(6, 15, 24, 0.86);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(242, 234, 216, 0.1);
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.admin-brand img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(201, 162, 75, 0.3);
+}
+
+.admin-brand .script {
+  display: block;
+  font-size: 23px;
+  line-height: 1;
+  color: var(--cream);
+}
+
+.admin-brand small {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.admin-head-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-who {
+  font-size: 13px;
+  color: var(--cream-dim);
+}
+
+.admin-who strong {
+  color: var(--cream);
+  font-weight: 500;
+}
+
+/* ---------- corps ---------- */
+
+.admin-body {
+  padding-top: clamp(28px, 5vh, 48px);
+}
+
+.admin-stats {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.admin-stats li {
+  padding: 18px 20px;
+  background: linear-gradient(180deg, rgba(242, 234, 216, 0.05), transparent);
+  border: 1px solid rgba(242, 234, 216, 0.12);
+  border-radius: 8px;
+}
+
+.admin-stats strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3.4vw, 44px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-stats span {
+  display: block;
+  margin-top: 7px;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ---------- onglets ---------- */
+
+.admin-tabs {
+  display: flex;
+  gap: 6px;
+  margin-top: clamp(26px, 4vh, 40px);
+  border-bottom: 1px solid rgba(242, 234, 216, 0.12);
+}
+
+.admin-tabs button {
+  position: relative;
+  padding: 13px 22px;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  transition: color 0.3s ease;
+}
+
+.admin-tabs button:hover {
+  color: var(--cream);
+}
+
+.admin-tabs button.is-active {
+  color: var(--gold-bright);
+}
+
+.admin-tabs button.is-active::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -1px;
+  height: 2px;
+  background: var(--gold);
+}
+
+/* ---------- messages ---------- */
+
+.admin-flash {
+  margin-top: 20px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: #d8f6e4;
+  background: rgba(22, 105, 80, 0.3);
+  border: 1px solid rgba(60, 175, 130, 0.45);
+  border-radius: 6px;
+}
+
+.admin-toast {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none; /* notification passagère : ne bloque aucun bouton */
+  right: clamp(16px, 3vw, 34px);
+  bottom: clamp(16px, 3vh, 34px);
+  max-width: min(400px, calc(100vw - 32px));
+  padding: 14px 20px;
+  font-size: 14px;
+  color: var(--navy-950);
+  background: var(--gold);
+  border-radius: 7px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.admin-inline-error {
+  margin-top: 14px;
+  padding: 11px 15px;
+  font-size: 13.5px;
+  color: #ffd9d0;
+  background: rgba(150, 44, 30, 0.26);
+  border: 1px solid rgba(220, 96, 74, 0.45);
+  border-radius: 6px;
+}
+
+.admin-loading,
+.admin-empty {
+  margin-top: 22px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-style: italic;
+  color: var(--cream-dim);
+}
+
+/* ---------- panneau ---------- */
+
+.admin-panel {
+  margin-top: clamp(26px, 4vh, 40px);
+}
+
+.admin-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-panel-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.2vw, 40px);
+  color: var(--cream);
+}
+
+.admin-panel-head p {
+  margin-top: 8px;
+  max-width: 56ch;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--cream-dim);
+}
+
+/* ---------- groupes de la carte ---------- */
+
+.admin-group {
+  margin-top: clamp(28px, 4vh, 44px);
+}
+
+.admin-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(242, 234, 216, 0.12);
+}
+
+.admin-group-head h3 {
+  font-family: var(--font-display);
+  font-size: clamp(21px, 2.3vw, 28px);
+  color: var(--cream);
+}
+
+.admin-group-head .script {
+  font-size: 19px;
+  color: var(--gold-bright);
+}
+
+.admin-group-head em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+}
+
+/* ---------- lignes ---------- */
+
+.admin-rows {
+  list-style: none;
+  margin-top: 6px;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 58px 1fr auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 12px;
+  border-bottom: 1px solid rgba(242, 234, 216, 0.09);
+  transition: background 0.3s ease;
+}
+
+.admin-row:hover {
+  background: rgba(242, 234, 216, 0.035);
+}
+
+.admin-row--hidden {
+  opacity: 0.5;
+}
+
+.admin-row-thumb {
+  width: 58px;
+  height: 58px;
+  border-radius: 5px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(242, 234, 216, 0.06);
+  border: 1px solid rgba(242, 234, 216, 0.1);
+  color: var(--gold);
+}
+
+.admin-row-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-row-main h4 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.9vw, 22px);
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.admin-row-main p {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--cream-dim);
+  max-width: 62ch;
+}
+
+.admin-tag {
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  border: 1px solid rgba(242, 234, 216, 0.28);
+}
+
+.admin-tag--gold {
+  color: var(--navy-950);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.admin-row-price {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.8vw, 21px);
+  color: var(--gold-bright);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ---------- boutons ---------- */
+
+.admin-btn {
+  padding: 9px 18px;
+  border-radius: 99px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+    transform 0.35s var(--ease-out-expo);
+}
+
+.admin-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.admin-btn--gold {
+  background: var(--gold);
+  color: var(--navy-950);
+}
+
+.admin-btn--gold:hover:not(:disabled) {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+}
+
+.admin-btn--ghost {
+  border: 1px solid rgba(242, 234, 216, 0.28);
+  color: var(--cream);
+}
+
+.admin-btn--ghost:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.admin-btn--quiet {
+  color: var(--cream-dim);
+  border: 1px solid transparent;
+}
+
+.admin-btn--quiet:hover:not(:disabled) {
+  color: var(--cream);
+  border-color: rgba(242, 234, 216, 0.2);
+}
+
+.admin-btn--danger {
+  color: #f0a294;
+  border: 1px solid rgba(220, 96, 74, 0.4);
+}
+
+.admin-btn--danger:hover:not(:disabled) {
+  background: rgba(150, 44, 30, 0.3);
+  color: #ffd9d0;
+}
+
+/* ---------- formulaire ---------- */
+
+.admin-form {
+  margin-top: 24px;
+  padding: clamp(20px, 3vw, 30px);
+  background: linear-gradient(180deg, rgba(242, 234, 216, 0.05), transparent);
+  border: 1px solid rgba(201, 162, 75, 0.35);
+  border-radius: 10px;
+  max-width: 720px;
+}
+
+.admin-form-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(242, 234, 216, 0.12);
+}
+
+.admin-form-head h3 {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 27px);
+  color: var(--cream);
+}
+
+.admin-field {
+  margin-top: 18px;
+}
+
+.admin-label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  color: var(--cream);
+  background: rgba(6, 15, 24, 0.6);
+  border: 1px solid rgba(242, 234, 216, 0.16);
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.admin-field textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus,
+.admin-field select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.admin-field select option {
+  background: var(--navy-900);
+}
+
+.admin-hint {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: rgba(216, 205, 180, 0.7);
+}
+
+/* ---------- photo ---------- */
+
+.admin-photo {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.admin-photo-preview {
+  width: 116px;
+  height: 116px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: rgba(6, 15, 24, 0.6);
+  border: 1px dashed rgba(242, 234, 216, 0.24);
+}
+
+.admin-photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-photo-empty {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(216, 205, 180, 0.6);
+  padding: 8px;
+}
+
+.admin-photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-photo-actions .admin-hint,
+.admin-photo-actions .admin-inline-error {
+  flex-basis: 100%;
+  margin-top: 0;
+}
+
+/* ---------- interrupteurs ---------- */
+
+.admin-toggles {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.admin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  padding: 13px 15px;
+  border: 1px solid rgba(242, 234, 216, 0.14);
+  border-radius: 7px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.admin-toggle:hover {
+  border-color: rgba(242, 234, 216, 0.3);
+}
+
+.admin-toggle--on {
+  border-color: rgba(201, 162, 75, 0.55);
+  background: rgba(201, 162, 75, 0.08);
+}
+
+.admin-toggle-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 22px;
+  border-radius: 99px;
+  background: rgba(242, 234, 216, 0.16);
+  transition: background 0.3s ease;
+}
+
+.admin-toggle--on .admin-toggle-track {
+  background: var(--gold);
+}
+
+.admin-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--cream);
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.admin-toggle--on .admin-toggle-knob {
+  transform: translateX(20px);
+  background: var(--navy-950);
+}
+
+.admin-toggle-text strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.admin-toggle-text em {
+  display: block;
+  margin-top: 3px;
+  font-style: normal;
+  font-size: 11.5px;
+  color: rgba(216, 205, 180, 0.75);
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+/* ---------- écran d'attente ---------- */
+
+.admin-boot {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  background: var(--navy-950);
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-style: italic;
+  color: var(--cream-dim);
+}
+
+@media (max-width: 900px) {
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-row {
+    grid-template-columns: 48px 1fr;
+    row-gap: 12px;
+  }
+  .admin-row-thumb {
+    width: 48px;
+    height: 48px;
+  }
+  .admin-row-price {
+    grid-column: 2;
+  }
+  .admin-row-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}

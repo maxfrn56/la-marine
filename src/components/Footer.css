@@ -104,6 +104,15 @@
   color: var(--cream-dim);
 }
 
+.footer-admin {
+  color: var(--gold);
+  transition: color 0.3s ease;
+}
+
+.footer-admin:hover {
+  color: var(--gold-bright);
+}
+
 .footer-up {
   font-size: 12px;
   letter-spacing: 0.2em;

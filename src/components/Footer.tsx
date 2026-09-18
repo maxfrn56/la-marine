@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import logo from "../assets/photos/logo.png";
 import "./Footer.css";
@@ -69,7 +70,13 @@ export default function Footer() {
 
       <div className="container footer-bottom">
         <img src={logo} alt="Logo La Marine" className="footer-logo" />
-        <p>© 1915 – 2026 La Marine, Quiberon. Maquette de démonstration.</p>
+        <p>
+          © 1915 – 2026 La Marine, Quiberon. Maquette de démonstration.
+          {" · "}
+          <Link to="/admin" className="footer-admin">
+            Espace restaurateur
+          </Link>
+        </p>
         <button
           type="button"
           className="footer-up"

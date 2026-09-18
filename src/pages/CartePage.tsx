@@ -2,161 +2,53 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import PageTransition from "../components/PageTransition";
 import PageHeader from "../components/PageHeader";
+import { useContent } from "../content/context";
+import type { Category, Dish } from "../api/types";
 import carpaccio from "../assets/photos/carpaccio.png";
 import entreeVerte from "../assets/photos/entree-verte.png";
 import salle from "../assets/photos/salle.png";
 import "./CartePage.css";
 
-type Item = { name: string; desc: string; price: string };
-type Section = { index: string; label: string; script: string; items: Item[] };
+function MenuSection({
+  category,
+  index,
+  dishes,
+  flip,
+}: {
+  category: Category;
+  index: number;
+  dishes: Dish[];
+  flip: boolean;
+}) {
+  if (!dishes.length) return null;
 
-const sections: Section[] = [
-  {
-    index: "01",
-    label: "Pour commencer",
-    script: "Mise en bouche",
-    items: [
-      {
-        name: "Huîtres creuses de la baie",
-        desc: "N°3 de Quiberon, vinaigre à l’échalote — les 6 / les 12",
-        price: "14 / 24 €",
-      },
-      {
-        name: "Crème de petits pois",
-        desc: "Burrata crémeuse, huile fumée & tuile croustillante",
-        price: "13 €",
-      },
-      {
-        name: "Foie gras de la maison",
-        desc: "Chutney d’oignons de Roscoff, brioche toastée",
-        price: "15 €",
-      },
-      {
-        name: "Rillettes de sardine fumée",
-        desc: "Citron confit, pain de seigle grillé",
-        price: "11 €",
-      },
-      {
-        name: "Soupe de poissons de roche",
-        desc: "Rouille, croûtons & emmental râpé",
-        price: "12 €",
-      },
-    ],
-  },
-  {
-    index: "02",
-    label: "L’écailler",
-    script: "Vue sur le port",
-    items: [
-      {
-        name: "Le plateau du marin",
-        desc: "Huîtres, bulots, crevettes bouquet, bigorneaux & tourteau",
-        price: "36 €",
-      },
-      {
-        name: "La planche maxi",
-        desc: "Le grand format à partager, comme les habitués",
-        price: "48 €",
-      },
-      {
-        name: "Bulots de casier",
-        desc: "Mayonnaise maison au citron",
-        price: "12 €",
-      },
-      {
-        name: "Crevettes bouquet",
-        desc: "Beurre demi-sel de la presqu’île",
-        price: "13 €",
-      },
-    ],
-  },
-  {
-    index: "03",
-    label: "Le retour de pêche",
-    script: "Selon la criée",
-    items: [
-      {
-        name: "Sole meunière entière",
-        desc: "Beurre aux algues, pommes grenailles rôties",
-        price: "34 €",
-      },
-      {
-        name: "Carpaccio de lieu jaune",
-        desc: "Agrumes, radis, pickles d’oignon rouge & sésame noir",
-        price: "16 €",
-      },
-      {
-        name: "Pavé de thon de ligne",
-        desc: "Mi-cuit, écrasé de pommes de terre au chorizo",
-        price: "26 €",
-      },
-      {
-        name: "Moules de bouchot",
-        desc: "Marinières ou à la crème, frites maison",
-        price: "16 €",
-      },
-      {
-        name: "La pêche du jour",
-        desc: "À l’ardoise, selon l’arrivage du matin",
-        price: "selon criée",
-      },
-    ],
-  },
-  {
-    index: "04",
-    label: "Douceurs",
-    script: "Pour finir en beauté",
-    items: [
-      {
-        name: "Far breton de grand-mère",
-        desc: "Aux pruneaux, comme il se doit",
-        price: "8 €",
-      },
-      {
-        name: "Kouign-amann tiède",
-        desc: "Caramel au beurre salé, glace vanille",
-        price: "9 €",
-      },
-      {
-        name: "Riz au lait de la maison",
-        desc: "Caramel laitier & éclats de sablé breton",
-        price: "8 €",
-      },
-      {
-        name: "Café gourmand",
-        desc: "Trois douceurs du moment",
-        price: "10 €",
-      },
-    ],
-  },
-];
-
-function MenuSection({ section, flip }: { section: Section; flip: boolean }) {
   return (
     <div className={`carte-page-section ${flip ? "carte-page-section--flip" : ""}`}>
       <div className="carte-page-section-head">
         <div className="carte-page-sticky">
-          <span className="carte-page-index">{section.index}</span>
-          <h2>{section.label}</h2>
-          <span className="script">{section.script}</span>
+          <span className="carte-page-index">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <h2>{category.label}</h2>
+          <span className="script">{category.script}</span>
         </div>
       </div>
 
       <ul className="carte-page-items">
-        {section.items.map((item, i) => (
+        {dishes.map((dish, i) => (
           <motion.li
-            key={item.name}
+            key={dish.id}
             initial={{ opacity: 0, y: 34 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-8% 0px" }}
             transition={{ delay: i * 0.06, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="carte-page-item-line">
-              <h3>{item.name}</h3>
+              <h3>{dish.name}</h3>
               <span className="carte-page-dots" aria-hidden />
-              <span className="carte-page-price">{item.price}</span>
+              <span className="carte-page-price">{dish.price}</span>
             </div>
-            <p>{item.desc}</p>
+            {dish.description && <p>{dish.description}</p>}
           </motion.li>
         ))}
       </ul>
@@ -165,6 +57,7 @@ function MenuSection({ section, flip }: { section: Section; flip: boolean }) {
 }
 
 export default function CartePage() {
+  const { categories, dishesOf, loading, error } = useContent();
   const bandRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: bandRef,
@@ -172,6 +65,9 @@ export default function CartePage() {
   });
   const y1 = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
   const y2 = useTransform(scrollYProgress, [0, 1], ["-4%", "8%"]);
+
+  // L'interlude photo se glisse au milieu de la carte.
+  const split = Math.ceil(categories.length / 2);
 
   return (
     <PageTransition>
@@ -195,9 +91,19 @@ export default function CartePage() {
           <span>Produits selon arrivage</span>
         </motion.div>
 
+        {loading && <p className="carte-page-state">Chargement de la carte…</p>}
+        {error && <p className="carte-page-state">{error}</p>}
+
         <div className="container">
-          <MenuSection section={sections[0]} flip={false} />
-          <MenuSection section={sections[1]} flip />
+          {categories.slice(0, split).map((category, i) => (
+            <MenuSection
+              key={category.slug}
+              category={category}
+              index={i}
+              dishes={dishesOf(category.slug)}
+              flip={i % 2 === 1}
+            />
+          ))}
         </div>
 
         {/* interlude visuel */}
@@ -205,7 +111,10 @@ export default function CartePage() {
           <motion.figure style={{ y: y1 }} className="carte-page-band-img">
             <img src={carpaccio} alt="Carpaccio de lieu jaune" />
           </motion.figure>
-          <motion.figure style={{ y: y2 }} className="carte-page-band-img carte-page-band-img--small">
+          <motion.figure
+            style={{ y: y2 }}
+            className="carte-page-band-img carte-page-band-img--small"
+          >
             <img src={entreeVerte} alt="Crème de petits pois, burrata" />
           </motion.figure>
           <motion.figure style={{ y: y1 }} className="carte-page-band-img">
@@ -214,8 +123,15 @@ export default function CartePage() {
         </div>
 
         <div className="container">
-          <MenuSection section={sections[2]} flip={false} />
-          <MenuSection section={sections[3]} flip />
+          {categories.slice(split).map((category, i) => (
+            <MenuSection
+              key={category.slug}
+              category={category}
+              index={split + i}
+              dishes={dishesOf(category.slug)}
+              flip={(split + i) % 2 === 1}
+            />
+          ))}
         </div>
 
         <motion.div

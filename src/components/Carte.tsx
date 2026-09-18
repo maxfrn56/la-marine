@@ -6,53 +6,15 @@ import {
   useSpring,
   AnimatePresence,
 } from "framer-motion";
-import carpaccio from "../assets/photos/carpaccio.png";
-import entreeVerte from "../assets/photos/entree-verte.png";
-import ginTonic from "../assets/photos/gin-tonic.png";
-import logo from "../assets/photos/logo.png";
+import { useContent } from "../content/context";
+import { dishImage } from "../content/images";
 import "./Carte.css";
 
-type Plat = {
-  name: string;
-  desc: string;
-  price: string;
-  image: string;
-};
-
-const plats: Plat[] = [
-  {
-    name: "Huîtres creuses de la baie",
-    desc: "N°3 de Quiberon, vinaigre à l’échalote, pain de seigle",
-    price: "14 €",
-    image: logo,
-  },
-  {
-    name: "Carpaccio de lieu jaune",
-    desc: "Agrumes, radis, pickles d’oignon rouge & sésame noir",
-    price: "16 €",
-    image: carpaccio,
-  },
-  {
-    name: "Crème de petits pois",
-    desc: "Burrata crémeuse, huile fumée & tuile croustillante",
-    price: "13 €",
-    image: entreeVerte,
-  },
-  {
-    name: "Sole meunière entière",
-    desc: "Beurre aux algues de la presqu’île, grenailles rôties",
-    price: "34 €",
-    image: logo,
-  },
-  {
-    name: "La planche du marin",
-    desc: "Le grand format de l’écailler, à partager en terrasse",
-    price: "42 €",
-    image: ginTonic,
-  },
-];
+/* La home met en avant les plats cochés « vitrine » dans le back-office. */
+const MAX_ON_HOME = 5;
 
 export default function Carte() {
+  const { featuredDishes, dishes, loading } = useContent();
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState<number | null>(null);
 
@@ -68,6 +30,9 @@ export default function Carte() {
     y.set(e.clientY - rect.top);
   };
 
+  // Sans sélection vitrine, on retombe sur les premiers plats de la carte.
+  const selection = (featuredDishes.length ? featuredDishes : dishes).slice(0, MAX_ON_HOME);
+
   return (
     <section className="carte" id="carte" ref={sectionRef} onMouseMove={onMouseMove}>
       <div className="container">
@@ -80,25 +45,29 @@ export default function Carte() {
           par personne.
         </p>
 
-        <ul className="carte-list" onMouseLeave={() => setActive(null)}>
-          {plats.map((plat, i) => (
-            <motion.li
-              key={plat.name}
-              onMouseEnter={() => setActive(i)}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-8% 0px" }}
-              transition={{ delay: i * 0.08, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="carte-index">0{i + 1}</span>
-              <div className="carte-plat">
-                <h3>{plat.name}</h3>
-                <p>{plat.desc}</p>
-              </div>
-              <span className="carte-price">{plat.price}</span>
-            </motion.li>
-          ))}
-        </ul>
+        {loading && !selection.length ? (
+          <p className="carte-state">Chargement de la carte…</p>
+        ) : (
+          <ul className="carte-list" onMouseLeave={() => setActive(null)}>
+            {selection.map((dish, i) => (
+              <motion.li
+                key={dish.id}
+                onMouseEnter={() => setActive(i)}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-8% 0px" }}
+                transition={{ delay: i * 0.08, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="carte-index">{String(i + 1).padStart(2, "0")}</span>
+                <div className="carte-plat">
+                  <h3>{dish.name}</h3>
+                  <p>{dish.description}</p>
+                </div>
+                <span className="carte-price">{dish.price}</span>
+              </motion.li>
+            ))}
+          </ul>
+        )}
 
         <Link to="/carte" className="section-link">
           Voir la carte complète <span aria-hidden>→</span>
@@ -112,10 +81,10 @@ export default function Carte() {
         aria-hidden
       >
         <AnimatePresence mode="popLayout">
-          {active !== null && (
+          {active !== null && selection[active] && (
             <motion.img
-              key={active}
-              src={plats[active].image}
+              key={selection[active].id}
+              src={dishImage(selection[active])}
               alt=""
               initial={{ opacity: 0, scale: 0.7, rotate: -6 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}

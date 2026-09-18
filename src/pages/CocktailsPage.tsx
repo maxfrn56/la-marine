@@ -2,38 +2,11 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import PageTransition from "../components/PageTransition";
 import PageHeader from "../components/PageHeader";
-import cocktailFraise from "../assets/photos/cocktail-fraise.png";
+import { useContent } from "../content/context";
+import { cocktailImage } from "../content/images";
 import ginTonic from "../assets/photos/gin-tonic.png";
 import equipeBar from "../assets/photos/equipe-bar.png";
 import "./CocktailsPage.css";
-
-const signatures = [
-  {
-    name: "Le Vieux Marin",
-    recipe: "Rhum ambré, citron vert, gingembre frais, sucre de canne",
-    price: "11 €",
-  },
-  {
-    name: "La Quiberonnaise",
-    recipe: "Gin, fraises écrasées, basilic, mousse citronnée",
-    price: "12 €",
-  },
-  {
-    name: "Port Maria Spritz",
-    recipe: "Apéritif d’algues bretonnes, prosecco, zeste d’orange",
-    price: "10 €",
-  },
-  {
-    name: "L’Abordage",
-    recipe: "Whisky tourbé, caramel au beurre salé, bitter cacao",
-    price: "12 €",
-  },
-  {
-    name: "La Sirène",
-    recipe: "Vodka, curaçao, tonic hysope, écume de mer",
-    price: "11 €",
-  },
-];
 
 const gins = [
   { name: "L’Acrobate", note: "Gin français, distillé à la main — vif & floral" },
@@ -42,6 +15,7 @@ const gins = [
 ];
 
 export default function CocktailsPage() {
+  const { cocktails, loading, error } = useContent();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -49,6 +23,9 @@ export default function CocktailsPage() {
   });
   const photoY = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
   const glowOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 1, 0.4]);
+
+  // Le cocktail mis en avant illustre le haut de page.
+  const vedette = cocktails.find((c) => c.featured) ?? cocktails[0];
 
   return (
     <PageTransition>
@@ -66,7 +43,7 @@ export default function CocktailsPage() {
           <div className="cocktails-hero-text">
             <span className="section-label">Les signatures</span>
             <h2>
-              Cinq créations,
+              {cocktails.length} créations,
               <em className="script"> une seule marée</em>
             </h2>
             <p>
@@ -76,16 +53,21 @@ export default function CocktailsPage() {
             </p>
           </div>
 
-          <motion.figure className="cocktails-hero-photo" style={{ y: photoY }}>
-            <img src={cocktailFraise} alt="La Quiberonnaise, cocktail signature à la fraise" />
-            <figcaption className="script">La Quiberonnaise</figcaption>
-          </motion.figure>
+          {vedette && (
+            <motion.figure className="cocktails-hero-photo" style={{ y: photoY }}>
+              <img src={cocktailImage(vedette)} alt={`${vedette.name}, cocktail signature`} />
+              <figcaption className="script">{vedette.name}</figcaption>
+            </motion.figure>
+          )}
         </div>
 
+        {loading && <p className="cocktails-state">Chargement de la carte du bar…</p>}
+        {error && <p className="cocktails-state">{error}</p>}
+
         <ul className="container cocktails-list">
-          {signatures.map((cocktail, i) => (
+          {cocktails.map((cocktail, i) => (
             <motion.li
-              key={cocktail.name}
+              key={cocktail.id}
               initial={{ opacity: 0, y: 44 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-8% 0px" }}

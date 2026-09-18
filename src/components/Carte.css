@@ -31,6 +31,14 @@
   list-style: none;
 }
 
+.carte-state {
+  margin-top: clamp(44px, 7vh, 80px);
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-style: italic;
+  color: var(--cream-dim);
+}
+
 .carte-list li {
   display: grid;
   grid-template-columns: 60px 1fr auto;
