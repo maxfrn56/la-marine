@@ -24,31 +24,54 @@ configuration supplémentaire n’est nécessaire.
 
 ```bash
 npm run build   # compile le site dans dist/
-npm run server  # sert l’API et le site compilé sur le port 4000
+npm start       # sert l’API et le site compilé sur le port 4000
 ```
 
 Le serveur sert alors `dist/` et renvoie `index.html` pour les routes React,
 ce qui permet d’ouvrir directement `/carte` ou `/admin`.
 
-Variables d’environnement utiles :
+### Variables d’environnement
 
-- `PORT` — port d’écoute (4000 par défaut)
-- `JWT_SECRET` — secret de signature des sessions ; à défaut, un secret
-  aléatoire est généré puis conservé dans `server/data/.jwt-secret`
-- `NODE_ENV=production` — active le cookie de session en `secure` (HTTPS requis)
+| Variable | Rôle |
+| --- | --- |
+| `DATA_DIR` | dossier de la base et des photos — **doit pointer vers un stockage persistant** |
+| `JWT_SECRET` | secret de signature des sessions ; à défaut, un secret aléatoire est généré dans `DATA_DIR/.jwt-secret` |
+| `NODE_ENV=production` | passe le cookie de session en `secure` (HTTPS requis) |
+| `PORT` | port d’écoute (4000 par défaut ; l’hébergeur le fournit généralement) |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | compte du restaurateur, créé au **premier** démarrage uniquement |
+
+### Déploiement sur Railway
+
+1. Créer un projet à partir du dépôt GitHub. Railway détecte Node, exécute
+   `npm ci`, `npm run build` puis `npm start` sans configuration.
+2. Ajouter un **volume** et le monter sur `/data`. Sans volume, la base et les
+   photos sont recréées à zéro à chaque redéploiement.
+3. Renseigner les variables :
+
+   ```
+   DATA_DIR=/data
+   NODE_ENV=production
+   JWT_SECRET=<chaîne aléatoire longue>
+   ADMIN_EMAIL=<e-mail du restaurateur>
+   ADMIN_PASSWORD=<mot de passe solide>
+   ADMIN_NAME=David Le Ruyet
+   ```
+
+   `ADMIN_*` doit être en place **avant** le premier démarrage : passé ce
+   point, le compte existe et ces variables ne sont plus relues. Le mot de
+   passe se change ensuite depuis l’onglet « Mon compte ».
+4. Générer un domaine dans les réglages du service.
+
+Ne pas renseigner `PORT` : Railway l’injecte lui-même.
 
 ## Le back-office
 
 Accessible sur `/admin`, également via « Espace restaurateur » en pied de page.
 
-Identifiants initiaux :
-
-```
-lamarine1712@gmail.com / LaMarine1915
-```
-
-Le mot de passe se change depuis l’onglet « Mon compte » — à faire dès la
-première connexion.
+En local, le compte est créé au premier démarrage avec des identifiants de
+démonstration (`lamarine1712@gmail.com` / `LaMarine1915`). En production, ils
+proviennent des variables `ADMIN_EMAIL` et `ADMIN_PASSWORD`, et le mot de passe
+se change depuis l’onglet « Mon compte ».
 
 Depuis le dashboard, le restaurateur peut :
 
@@ -67,7 +90,8 @@ sur la page d’accueil.
 server/
   index.js     API Express : session, CRUD, envoi de photos, service de dist/
   db.js        SQLite (schéma, amorçage, hachage des mots de passe)
-  data/        base, secret de session et photos envoyées (hors dépôt)
+  data/        base, secret de session et photos envoyées (hors dépôt,
+               emplacement redéfinissable par DATA_DIR)
 
 src/
   api/         client HTTP et types partagés

@@ -28,6 +28,8 @@ function loadSecret() {
 const SECRET = loadSecret();
 
 const app = express();
+// Derrière le reverse proxy de l'hébergeur, pour reconnaître les requêtes HTTPS.
+app.set("trust proxy", 1);
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 

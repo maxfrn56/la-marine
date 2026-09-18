@@ -1,11 +1,18 @@
 import Database from "better-sqlite3";
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-export const DATA_DIR = join(here, "data");
+
+/*
+ * En hébergement, `DATA_DIR` doit pointer vers un volume persistant : sans
+ * cela, la base et les photos disparaîtraient à chaque redéploiement.
+ */
+export const DATA_DIR = process.env.DATA_DIR
+  ? resolve(process.env.DATA_DIR)
+  : join(here, "data");
 export const UPLOADS_DIR = join(DATA_DIR, "uploads");
 
 mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -108,13 +115,21 @@ const SEED_COCKTAILS = [
 function seed() {
   const admins = db.prepare("SELECT COUNT(*) AS n FROM admins").get().n;
   if (admins === 0) {
+    // Le compte n'est créé qu'au premier démarrage, depuis l'environnement.
     db.prepare(
       "INSERT INTO admins (email, password_hash, name) VALUES (?, ?, ?)"
     ).run(
-      "lamarine1712@gmail.com",
-      hashPassword("LaMarine1915"),
-      "David Le Ruyet"
+      process.env.ADMIN_EMAIL ?? "lamarine1712@gmail.com",
+      hashPassword(process.env.ADMIN_PASSWORD ?? "LaMarine1915"),
+      process.env.ADMIN_NAME ?? "David Le Ruyet"
     );
+
+    if (!process.env.ADMIN_PASSWORD) {
+      console.warn(
+        "⚠︎  Compte admin créé avec le mot de passe de démonstration. " +
+          "Définissez ADMIN_PASSWORD avant le premier démarrage en production."
+      );
+    }
   }
 
   const dishes = db.prepare("SELECT COUNT(*) AS n FROM dishes").get().n;
