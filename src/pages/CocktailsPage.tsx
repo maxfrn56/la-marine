@@ -73,7 +73,13 @@ export default function CocktailsPage() {
               viewport={{ once: true, margin: "-8% 0px" }}
               transition={{ delay: i * 0.07, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <span className="cocktails-num">N°{i + 1}</span>
+              {cocktail.image ? (
+                <figure className="cocktails-thumb">
+                  <img src={cocktail.image} alt={cocktail.name} loading="lazy" />
+                </figure>
+              ) : (
+                <span className="cocktails-num">N°{i + 1}</span>
+              )}
               <div>
                 <h3>{cocktail.name}</h3>
                 <p>{cocktail.recipe}</p>

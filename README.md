@@ -77,7 +77,9 @@ Depuis le dashboard, le restaurateur peut :
 
 - ajouter, modifier et supprimer les plats, rangés par rubrique de la carte
 - faire de même pour les cocktails du bar
-- envoyer une photo pour chaque plat ou cocktail
+- envoyer une photo pour chaque plat ou cocktail, redimensionnée et convertie
+  en WebP par le navigateur avant l’envoi (une photo de téléphone de 2,5 Mo
+  tombe à environ 300 Ko)
 - masquer temporairement un élément sans le supprimer (rupture, hors saison)
 - mettre un élément « en vitrine » pour le faire apparaître sur l’accueil
 

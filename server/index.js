@@ -3,7 +3,14 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import { randomBytes } from "node:crypto";
-import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { basename, dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import db, {
@@ -172,6 +179,38 @@ function pruneUpload(url) {
 
   const file = join(UPLOADS_DIR, basename(url));
   rmSync(file, { force: true });
+}
+
+/*
+ * L'envoi d'une photo est immédiat, son rattachement à un plat ne l'est pas :
+ * un formulaire abandonné laisse donc un fichier que personne ne référence.
+ * On balaie ces restes au démarrage, en épargnant les fichiers récents, qui
+ * peuvent appartenir à un formulaire encore ouvert.
+ */
+function sweepOrphanUploads() {
+  const DELAI_DE_GRACE = 24 * 3600 * 1000;
+  let supprimees = 0;
+
+  try {
+    const referencees = new Set(
+      [
+        ...db.prepare("SELECT image FROM dishes WHERE image IS NOT NULL").all(),
+        ...db.prepare("SELECT image FROM cocktails WHERE image IS NOT NULL").all(),
+      ].map((row) => basename(row.image))
+    );
+
+    for (const nom of readdirSync(UPLOADS_DIR)) {
+      if (referencees.has(nom)) continue;
+      const file = join(UPLOADS_DIR, nom);
+      if (Date.now() - statSync(file).mtimeMs < DELAI_DE_GRACE) continue;
+      rmSync(file, { force: true });
+      supprimees += 1;
+    }
+  } catch {
+    // Le ménage ne doit jamais empêcher le serveur de démarrer.
+  }
+
+  if (supprimees) console.log(`${supprimees} photo(s) orpheline(s) supprimée(s).`);
 }
 
 app.get("/api/admin/dishes", requireAuth, (_req, res) => {
@@ -356,7 +395,13 @@ app.delete("/api/admin/cocktails/:id", requireAuth, (req, res) => {
 
 app.post("/api/admin/upload", requireAuth, (req, res) => {
   upload.single("photo")(req, res, (err) => {
-    if (err) return res.status(400).json({ error: err.message });
+    if (err) {
+      const message =
+        err.code === "LIMIT_FILE_SIZE"
+          ? "Cette image est trop lourde (6 Mo maximum) et n’a pas pu être allégée."
+          : err.message;
+      return res.status(400).json({ error: message });
+    }
     if (!req.file) return res.status(400).json({ error: "Aucun fichier reçu." });
     res.status(201).json({ url: `/uploads/${req.file.filename}` });
   });
@@ -370,6 +415,8 @@ if (existsSync(DIST)) {
   // Les routes React (/carte, /admin…) sont rendues côté client.
   app.get(/^\/(?!api|uploads).*/, (_req, res) => res.sendFile(join(DIST, "index.html")));
 }
+
+sweepOrphanUploads();
 
 app.listen(PORT, () => {
   console.log(`API La Marine → http://localhost:${PORT}`);

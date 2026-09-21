@@ -22,6 +22,10 @@ function MenuSection({
 }) {
   if (!dishes.length) return null;
 
+  // Dès qu'un plat de la rubrique a une photo, tous réservent la colonne :
+  // sans cela, seule cette ligne serait décalée vers la droite.
+  const withPhotos = dishes.some((dish) => dish.image);
+
   return (
     <div className={`carte-page-section ${flip ? "carte-page-section--flip" : ""}`}>
       <div className="carte-page-section-head">
@@ -43,12 +47,25 @@ function MenuSection({
             viewport={{ once: true, margin: "-8% 0px" }}
             transition={{ delay: i * 0.06, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="carte-page-item-line">
-              <h3>{dish.name}</h3>
-              <span className="carte-page-dots" aria-hidden />
-              <span className="carte-page-price">{dish.price}</span>
+            <div className="carte-page-item">
+              {withPhotos &&
+                (dish.image ? (
+                  <figure className="carte-page-thumb">
+                    <img src={dish.image} alt={dish.name} loading="lazy" />
+                  </figure>
+                ) : (
+                  <span className="carte-page-thumb carte-page-thumb--empty" aria-hidden />
+                ))}
+
+              <div className="carte-page-item-body">
+                <div className="carte-page-item-line">
+                  <h3>{dish.name}</h3>
+                  <span className="carte-page-dots" aria-hidden />
+                  <span className="carte-page-price">{dish.price}</span>
+                </div>
+                {dish.description && <p>{dish.description}</p>}
+              </div>
             </div>
-            {dish.description && <p>{dish.description}</p>}
           </motion.li>
         ))}
       </ul>

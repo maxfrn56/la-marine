@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { uploadPhoto } from "../api/client";
+import { prepareImage } from "./prepareImage";
 
 type Props = {
   value: string | null;
@@ -17,7 +18,7 @@ export default function PhotoField({ value, onChange, label = "Photo" }: Props) 
     setBusy(true);
     setError(null);
     try {
-      const { url } = await uploadPhoto(file);
+      const { url } = await uploadPhoto(await prepareImage(file));
       onChange(url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Envoi impossible.");
@@ -54,7 +55,7 @@ export default function PhotoField({ value, onChange, label = "Photo" }: Props) 
             onClick={() => input.current?.click()}
             disabled={busy}
           >
-            {busy ? "Envoi…" : value ? "Remplacer" : "Choisir une photo"}
+            {busy ? "Traitement…" : value ? "Remplacer" : "Choisir une photo"}
           </button>
           {value && (
             <button
@@ -65,7 +66,10 @@ export default function PhotoField({ value, onChange, label = "Photo" }: Props) 
               Retirer
             </button>
           )}
-          <p className="admin-hint">JPG, PNG ou WebP — 6 Mo maximum.</p>
+          <p className="admin-hint">
+            JPG, PNG ou WebP. Les photos sont allégées automatiquement : prenez
+            la meilleure, sans vous soucier de son poids.
+          </p>
           {error && <p className="admin-inline-error">{error}</p>}
         </div>
       </div>
