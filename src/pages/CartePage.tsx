@@ -86,8 +86,6 @@ export default function CartePage() {
         >
           <span>Midi &amp; soir</span>
           <i>✦</i>
-          <span>20 – 40 € par personne</span>
-          <i>✦</i>
           <span>Produits selon arrivage</span>
         </motion.div>
 

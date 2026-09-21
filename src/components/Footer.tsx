@@ -52,11 +52,11 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h3>Budget</h3>
+            <h3>Votre visite</h3>
             <p>
-              20 – 40 € par personne
-              <br />
               1 à 2 heures à bord
+              <br />
+              Réservation conseillée
             </p>
           </div>
         </div>

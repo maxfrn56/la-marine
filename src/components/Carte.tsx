@@ -41,8 +41,8 @@ export default function Carte() {
           Le retour de pêche, <em className="script">en direct du port</em>
         </h2>
         <p className="carte-sub">
-          Une carte courte, dictée par la criée du matin. Comptez 20 à 40 €
-          par personne.
+          Une carte courte, dictée par la criée du matin et renouvelée au fil
+          des arrivages.
         </p>
 
         {loading && !selection.length ? (
