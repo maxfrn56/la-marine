@@ -47,6 +47,7 @@ export default function PublicSite() {
       duration: 1.25,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      prevent: (node) => node.closest("[data-lenis-prevent]") != null,
     });
     setLenis(instance);
 
@@ -70,6 +71,28 @@ export default function PublicSite() {
       document.body.style.overflow = "";
     };
   }, [loaded]);
+
+  // Pendant la réservation, Lenis lâche le trackpad pour le panneau.
+  useEffect(() => {
+    if (!lenis) return;
+    const sync = () => {
+      if (document.documentElement.classList.contains("booking-open")) {
+        lenis.stop();
+      } else {
+        lenis.start();
+      }
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => {
+      observer.disconnect();
+      lenis.start();
+    };
+  }, [lenis]);
 
   return (
     <ReservationProvider>

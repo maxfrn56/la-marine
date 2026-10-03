@@ -39,9 +39,8 @@ ce qui permet d’ouvrir directement `/carte` ou `/admin`.
 | `NODE_ENV=production` | passe le cookie de session en `secure` (HTTPS requis) |
 | `PORT` | port d’écoute (4000 par défaut ; l’hébergeur le fournit généralement) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | compte du restaurateur, créé au **premier** démarrage uniquement |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | serveur d’envoi des e-mails de confirmation |
-| `SMTP_SECURE` | `true` si le port est en SMTPS (465) |
-| `MAIL_FROM` | expéditeur (ex. `La Marine <contact@…>`) |
+| `RESEND_API_KEY` | clé API Resend pour les e-mails de confirmation |
+| `MAIL_FROM` | expéditeur vérifié chez Resend (ex. `La Marine <reservations@votredomaine.fr>`) |
 | `NOTIFY_EMAIL` | adresse du restaurant, copie de chaque réservation |
 
 ### Déploiement sur Railway
@@ -59,17 +58,20 @@ ce qui permet d’ouvrir directement `/carte` ou `/admin`.
    ADMIN_EMAIL=<e-mail du restaurateur>
    ADMIN_PASSWORD=<mot de passe solide>
    ADMIN_NAME=David Le Ruyet
-   SMTP_HOST=<serveur SMTP>
-   SMTP_PORT=587
-   SMTP_USER=<identifiant>
-   SMTP_PASS=<mot de passe>
-   MAIL_FROM=La Marine <contact@…>
+   RESEND_API_KEY=re_xxxxxxxx
+   MAIL_FROM=La Marine <reservations@votredomaine.fr>
    NOTIFY_EMAIL=<e-mail du restaurant>
    ```
 
    `ADMIN_*` doit être en place **avant** le premier démarrage : passé ce
    point, le compte existe et ces variables ne sont plus relues. Le mot de
    passe se change ensuite depuis l’onglet « Mon compte ».
+
+   Les e-mails passent par Resend (HTTPS), pas par SMTP : Railway ne les
+   bloque pas. Crée une clé sur [resend.com](https://resend.com), vérifie
+   un domaine, puis mets cette adresse dans `MAIL_FROM`. Sans domaine
+   vérifié, `La Marine <beth.t@example.com>` ne peut écrire qu’à
+   l’e-mail du compte Resend (utile pour un test).
 4. Générer un domaine dans les réglages du service.
 
 Ne pas renseigner `PORT` : Railway l’injecte lui-même.

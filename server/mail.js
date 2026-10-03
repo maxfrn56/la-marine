@@ -1,19 +1,10 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const FROM = process.env.MAIL_FROM ?? "La Marine <noreply@lamarine-quiberon.fr>";
+const FROM = process.env.MAIL_FROM ?? "La Marine <beth.t@example.com>";
 const RESTAURANT = process.env.NOTIFY_EMAIL ?? process.env.ADMIN_EMAIL ?? "";
+const KEY = process.env.RESEND_API_KEY ?? "";
 
-function transport() {
-  if (!process.env.SMTP_HOST) return null;
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT ?? 587),
-    secure: process.env.SMTP_SECURE === "true",
-    auth: process.env.SMTP_USER
-      ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-      : undefined,
-  });
-}
+const resend = KEY ? new Resend(KEY) : null;
 
 function formatDate(date) {
   return new Intl.DateTimeFormat("fr-FR", {
@@ -81,12 +72,19 @@ function details(reservation) {
 }
 
 async function send(message) {
-  const mailer = transport();
-  if (!mailer) {
-    console.warn("Mail non envoyé (SMTP_HOST absent) :", message.subject);
+  if (!resend) {
+    console.warn("Mail non envoyé (RESEND_API_KEY absente) :", message.subject);
     return { sent: false };
   }
-  await mailer.sendMail({ from: FROM, ...message });
+  const { error } = await resend.emails.send({
+    from: FROM,
+    replyTo: RESTAURANT || undefined,
+    to: message.to,
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+  });
+  if (error) throw new Error(error.message);
   return { sent: true };
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import * as api from "../api/client";
 import type { BookingConfig, BookingSlot, Reservation } from "../api/types";
@@ -43,6 +43,10 @@ export default function ReservationWidget() {
   const [done, setDone] = useState<{ reservation: Reservation; emailSent: boolean } | null>(
     null
   );
+  const [focus, setFocus] = useState<"party" | "date" | "time" | "contact">("party");
+  const calRef = useRef<HTMLDivElement>(null);
+  const slotsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     void api
@@ -56,8 +60,22 @@ export default function ReservationWidget() {
 
   useEffect(() => {
     document.documentElement.classList.toggle("booking-open", isOpen);
+    if (isOpen) setFocus("party");
     return () => document.documentElement.classList.remove("booking-open");
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const target =
+      focus === "date"
+        ? calRef.current
+        : focus === "time"
+          ? slotsRef.current
+          : focus === "contact"
+            ? contactRef.current
+            : null;
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [isOpen, focus, draft.date, draft.time, loadingSlots]);
 
   useEffect(() => {
     if (!isOpen || !draft.date || !config) return;
@@ -165,6 +183,12 @@ export default function ReservationWidget() {
                 </button>
               </header>
 
+              <div
+                className="book-body"
+                data-lenis-prevent
+                onWheel={(event) => event.stopPropagation()}
+                onTouchMove={(event) => event.stopPropagation()}
+              >
               {done ? (
                 <div className="book-success">
                   <p className="script">C’est noté</p>
@@ -200,7 +224,10 @@ export default function ReservationWidget() {
                           key={n}
                           type="button"
                           className={draft.party === n ? "is-on" : ""}
-                          onClick={() => setDraft((prev) => ({ ...prev, party: n, time: "" }))}
+                          onClick={() => {
+                            setDraft((prev) => ({ ...prev, party: n, time: "" }));
+                            setFocus(draft.date ? "time" : "date");
+                          }}
                         >
                           {n}
                         </button>
@@ -209,7 +236,7 @@ export default function ReservationWidget() {
                     <p>Au-delà de {config?.maxParty ?? 8}, appelez le 02 97 50 09 81.</p>
                   </fieldset>
 
-                  <div className="book-cal">
+                  <div className="book-cal" ref={calRef}>
                     <div className="book-cal-nav">
                       <button
                         type="button"
@@ -246,7 +273,10 @@ export default function ReservationWidget() {
                             type="button"
                             disabled={disabled}
                             className={draft.date === day ? "is-on" : ""}
-                            onClick={() => setDraft((prev) => ({ ...prev, date: day, time: "" }))}
+                            onClick={() => {
+                              setDraft((prev) => ({ ...prev, date: day, time: "" }));
+                              setFocus("time");
+                            }}
                           >
                             {Number(day.slice(-2))}
                           </button>
@@ -256,7 +286,7 @@ export default function ReservationWidget() {
                   </div>
 
                   {draft.date && (
-                    <div className="book-slots">
+                    <div className="book-slots" ref={slotsRef}>
                       <p className="book-slots-label">{formatLongDate(draft.date)}</p>
                       {loadingSlots && <p className="book-hint">Chargement des créneaux…</p>}
                       {closedDay && (
@@ -268,13 +298,19 @@ export default function ReservationWidget() {
                             title="Midi"
                             slots={midi}
                             selected={draft.time}
-                            onPick={(time) => setDraft((prev) => ({ ...prev, time }))}
+                            onPick={(time) => {
+                              setDraft((prev) => ({ ...prev, time }));
+                              setFocus("contact");
+                            }}
                           />
                           <SlotGroup
                             title="Soir"
                             slots={soir}
                             selected={draft.time}
-                            onPick={(time) => setDraft((prev) => ({ ...prev, time }))}
+                            onPick={(time) => {
+                              setDraft((prev) => ({ ...prev, time }));
+                              setFocus("contact");
+                            }}
                           />
                         </>
                       )}
@@ -282,7 +318,7 @@ export default function ReservationWidget() {
                   )}
 
                   {draft.time && (
-                    <div className="book-contact">
+                    <div className="book-contact" ref={contactRef}>
                       <label>
                         <span>Nom</span>
                         <input
@@ -344,6 +380,7 @@ export default function ReservationWidget() {
                   {error && <p className="book-error">{error}</p>}
                 </form>
               )}
+              </div>
             </motion.aside>
           </motion.div>
         )}
