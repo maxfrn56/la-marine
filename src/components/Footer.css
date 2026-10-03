@@ -38,7 +38,17 @@
   transition: color 0.3s ease;
 }
 
-.footer-phone:hover {
+.footer-phone--ghost {
+  display: block;
+  margin-top: 14px;
+  font-size: clamp(16px, 1.6vw, 20px);
+  border-bottom: none;
+  letter-spacing: 0.12em;
+  color: var(--cream-dim);
+}
+
+.footer-phone:hover,
+.footer-phone--ghost:hover {
   color: var(--gold-bright);
 }
 

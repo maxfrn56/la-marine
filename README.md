@@ -39,6 +39,10 @@ ce qui permet d’ouvrir directement `/carte` ou `/admin`.
 | `NODE_ENV=production` | passe le cookie de session en `secure` (HTTPS requis) |
 | `PORT` | port d’écoute (4000 par défaut ; l’hébergeur le fournit généralement) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | compte du restaurateur, créé au **premier** démarrage uniquement |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | serveur d’envoi des e-mails de confirmation |
+| `SMTP_SECURE` | `true` si le port est en SMTPS (465) |
+| `MAIL_FROM` | expéditeur (ex. `La Marine <contact@…>`) |
+| `NOTIFY_EMAIL` | adresse du restaurant, copie de chaque réservation |
 
 ### Déploiement sur Railway
 
@@ -55,6 +59,12 @@ ce qui permet d’ouvrir directement `/carte` ou `/admin`.
    ADMIN_EMAIL=<e-mail du restaurateur>
    ADMIN_PASSWORD=<mot de passe solide>
    ADMIN_NAME=David Le Ruyet
+   SMTP_HOST=<serveur SMTP>
+   SMTP_PORT=587
+   SMTP_USER=<identifiant>
+   SMTP_PASS=<mot de passe>
+   MAIL_FROM=La Marine <contact@…>
+   NOTIFY_EMAIL=<e-mail du restaurant>
    ```
 
    `ADMIN_*` doit être en place **avant** le premier démarrage : passé ce
@@ -82,16 +92,22 @@ Depuis le dashboard, le restaurateur peut :
   tombe à environ 300 Ko)
 - masquer temporairement un élément sans le supprimer (rupture, hors saison)
 - mettre un élément « en vitrine » pour le faire apparaître sur l’accueil
+- consulter les réservations du jour, bloquer un créneau ou un service,
+  annuler une table, noter une réservation prise au téléphone
+- régler la capacité midi / soir et les jours de fermeture
 
-Toute modification est immédiatement répercutée sur la page concernée **et**
-sur la page d’accueil.
+Toute modification de la carte est immédiatement répercutée sur la page
+concernée **et** sur la page d’accueil. Les créneaux bloqués disparaissent
+du module de réservation public.
 
 ## Architecture
 
 ```
 server/
-  index.js     API Express : session, CRUD, envoi de photos, service de dist/
+  index.js     API Express : session, CRUD, réservations, photos, dist/
   db.js        SQLite (schéma, amorçage, hachage des mots de passe)
+  booking.js   Disponibilité, capacité, blocages de créneaux
+  mail.js      E-mails de confirmation et d’annulation
   data/        base, secret de session et photos envoyées (hors dépôt,
                emplacement redéfinissable par DATA_DIR)
 
@@ -99,6 +115,7 @@ src/
   api/         client HTTP et types partagés
   content/     ContentProvider : charge la carte et la diffuse au site
   admin/       connexion et dashboard
+  reservations/ module de réservation public (bouton + panneau)
   pages/       Accueil, La carte, Cocktails, Histoire
   components/  sections et éléments d’interface du site
 ```

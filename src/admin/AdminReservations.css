@@ -1,0 +1,270 @@
+.rsv-head-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rsv-daynav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.rsv-daynav > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.rsv-daynav strong {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.6vw, 32px);
+  color: var(--cream);
+  text-transform: capitalize;
+}
+
+.rsv-daynav input[type="date"] {
+  background: transparent;
+  color: var(--cream-dim);
+  border: 1px solid rgba(242, 234, 216, 0.16);
+  border-radius: 99px;
+  padding: 6px 12px;
+  font-family: var(--font-sans);
+}
+
+.rsv-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.rsv-strip button {
+  padding: 10px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(242, 234, 216, 0.12);
+  text-align: center;
+}
+
+.rsv-strip button.is-on {
+  border-color: var(--gold);
+  background: rgba(201, 162, 75, 0.12);
+}
+
+.rsv-strip span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.rsv-strip strong {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--cream);
+}
+
+.rsv-occupancy {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.rsv-occupancy li {
+  padding: 16px 18px;
+  border: 1px solid rgba(242, 234, 216, 0.12);
+  border-radius: 8px;
+}
+
+.rsv-occupancy em {
+  display: block;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.rsv-occupancy strong {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--cream);
+}
+
+.rsv-occupancy small {
+  font-size: 18px;
+  color: var(--cream-dim);
+}
+
+.rsv-bar {
+  display: block;
+  margin-top: 10px;
+  height: 4px;
+  background: rgba(242, 234, 216, 0.12);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.rsv-bar i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+}
+
+.rsv-block-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.rsv-services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 36px;
+}
+
+.rsv-col header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(242, 234, 216, 0.12);
+}
+
+.rsv-col h3 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--cream);
+}
+
+.rsv-col header em {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--cream-dim);
+  margin-right: auto;
+}
+
+.rsv-col ul {
+  list-style: none;
+}
+
+.rsv-col li {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(242, 234, 216, 0.08);
+}
+
+.rsv-col li.is-dim {
+  opacity: 0.55;
+}
+
+.rsv-slot-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rsv-slot-head strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--gold-bright);
+  min-width: 3.5ch;
+}
+
+.rsv-slot-head span {
+  font-size: 12px;
+  color: var(--cream-dim);
+  margin-right: auto;
+}
+
+.rsv-empty {
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(216, 205, 180, 0.55);
+}
+
+.rsv-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: rgba(242, 234, 216, 0.04);
+  border-radius: 6px;
+}
+
+.rsv-card h4 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--cream);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.rsv-card small {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.rsv-card p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--cream-dim);
+}
+
+.rsv-notes {
+  font-style: italic;
+}
+
+.rsv-days {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.rsv-days button {
+  padding: 8px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(242, 234, 216, 0.2);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rsv-days button.is-on {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-950);
+}
+
+@media (max-width: 900px) {
+  .rsv-occupancy,
+  .rsv-services {
+    grid-template-columns: 1fr;
+  }
+  .rsv-strip {
+    grid-template-columns: repeat(7, minmax(56px, 1fr));
+    overflow-x: auto;
+  }
+}

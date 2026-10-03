@@ -2,11 +2,13 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import salle from "../assets/photos/salle.png";
+import { useReservation } from "../reservations/context";
 import "./Hero.css";
 
 const title = "La Marine";
 
 export default function Hero({ started }: { started: boolean }) {
+  const { open } = useReservation();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -73,9 +75,9 @@ export default function Hero({ started }: { started: boolean }) {
           animate={started ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 1.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          <a href="tel:0297500981" className="hero-btn hero-btn--gold">
+          <button type="button" className="hero-btn hero-btn--gold" onClick={open}>
             Réserver une table
-          </a>
+          </button>
           <Link to="/carte" className="hero-btn hero-btn--ghost">
             Découvrir la carte
           </Link>

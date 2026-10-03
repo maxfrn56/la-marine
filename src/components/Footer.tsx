@@ -2,9 +2,11 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import logo from "../assets/photos/logo.png";
+import { useReservation } from "../reservations/context";
 import "./Footer.css";
 
 export default function Footer() {
+  const { open } = useReservation();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -21,7 +23,10 @@ export default function Footer() {
             Une table vous attend
             <em className="script"> face au port</em>
           </h2>
-          <a href="tel:0297500981" className="footer-phone">
+          <button type="button" className="footer-phone" onClick={open}>
+            Réserver une table
+          </button>
+          <a href="tel:0297500981" className="footer-phone footer-phone--ghost">
             02 97 50 09 81
           </a>
         </div>

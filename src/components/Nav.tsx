@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import logo from "../assets/photos/logo.png";
+import { useReservation } from "../reservations/context";
 import "./Nav.css";
 
 const links = [
@@ -15,6 +16,7 @@ export default function Nav() {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { open } = useReservation();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -49,10 +51,10 @@ export default function Nav() {
         ))}
       </nav>
 
-      <a href="tel:0297500981" className="nav-cta">
+      <button type="button" className="nav-cta" onClick={open}>
         <span>Réserver</span>
-        <em>02 97 50 09 81</em>
-      </a>
+        <em>une table</em>
+      </button>
     </motion.header>
   );
 }

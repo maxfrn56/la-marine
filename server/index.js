@@ -20,6 +20,8 @@ import db, {
   hashPassword,
   verifyPassword,
 } from "./db.js";
+import * as booking from "./booking.js";
+import { sendCancellation, sendConfirmation } from "./mail.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 4000);
@@ -405,6 +407,144 @@ app.post("/api/admin/upload", requireAuth, (req, res) => {
     if (!req.file) return res.status(400).json({ error: "Aucun fichier reçu." });
     res.status(201).json({ url: `/uploads/${req.file.filename}` });
   });
+});
+
+/* ---------- réservations ---------- */
+
+const hitsByIp = new Map();
+function tooManyBookings(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 60 * 1000;
+  const prev = (hitsByIp.get(ip) ?? []).filter((t) => now - t < windowMs);
+  if (prev.length >= 6) {
+    hitsByIp.set(ip, prev);
+    return true;
+  }
+  prev.push(now);
+  hitsByIp.set(ip, prev);
+  return false;
+}
+
+app.get("/api/reservations/config", (_req, res) => {
+  res.json(booking.publicConfig());
+});
+
+app.get("/api/reservations/availability", (req, res) => {
+  const date = String(req.query.date ?? "");
+  const party = Number(req.query.party ?? 2);
+  if (!booking.isValidDate(date)) {
+    return res.status(400).json({ error: "La date est invalide." });
+  }
+  const settings = booking.getSettings();
+  if (!Number.isInteger(party) || party < settings.minParty || party > settings.maxParty) {
+    return res.status(400).json({ error: "Le nombre de couverts est invalide." });
+  }
+  res.json(booking.availability(date, party));
+});
+
+app.post("/api/reservations", async (req, res) => {
+  if (req.body?.website) return res.status(201).json({ ok: true });
+  const ip = req.ip ?? req.socket?.remoteAddress ?? "unknown";
+  if (tooManyBookings(ip)) {
+    return res.status(429).json({ error: "Trop de tentatives. Réessayez dans un moment, ou appelez-nous." });
+  }
+  try {
+    const payload = booking.parseBooking(req.body ?? {});
+    const reservation = booking.createReservation(payload);
+    let emailSent = false;
+    try {
+      const result = await sendConfirmation(reservation);
+      emailSent = result.guest;
+    } catch (err) {
+      console.error("E-mail de confirmation :", err.message);
+    }
+    res.status(201).json({ reservation, emailSent });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.get("/api/admin/reservations", requireAuth, (req, res) => {
+  const date = booking.isValidDate(String(req.query.date ?? ""))
+    ? String(req.query.date)
+    : booking.todayParis();
+  res.json({
+    ...booking.dayOverview(date),
+    upcoming: booking.upcomingCounts(booking.todayParis(), 14),
+  });
+});
+
+app.post("/api/admin/reservations", requireAuth, async (req, res) => {
+  try {
+    const payload = booking.parseBooking(req.body ?? {}, { admin: true });
+    const reservation = booking.createReservation(payload);
+    try {
+      await sendConfirmation(reservation);
+    } catch (err) {
+      console.error("E-mail de confirmation :", err.message);
+    }
+    res.status(201).json({ reservation });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post("/api/admin/reservations/:id/cancel", requireAuth, async (req, res) => {
+  const reservation = booking.cancelReservation(req.params.id);
+  if (!reservation) return res.status(404).json({ error: "Réservation introuvable." });
+  try {
+    await sendCancellation(reservation);
+  } catch (err) {
+    console.error("E-mail d’annulation :", err.message);
+  }
+  res.json({ reservation });
+});
+
+app.post("/api/admin/blocks", requireAuth, (req, res) => {
+  try {
+    const block = booking.addBlock(req.body ?? {});
+    res.status(201).json({
+      block: {
+        id: block.id,
+        date: block.date,
+        service: block.service,
+        time: block.time,
+        reason: block.reason,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete("/api/admin/blocks/:id", requireAuth, (req, res) => {
+  if (!booking.removeBlock(req.params.id)) {
+    return res.status(404).json({ error: "Blocage introuvable." });
+  }
+  res.json({ ok: true });
+});
+
+app.patch("/api/admin/booking-settings", requireAuth, (req, res) => {
+  const body = req.body ?? {};
+  const next = {};
+  for (const key of ["lunchCapacity", "dinnerCapacity", "slotCapacity", "maxParty", "horizonDays"]) {
+    if (key in body) {
+      const value = Number(body[key]);
+      if (!Number.isInteger(value) || value < 1) {
+        return res.status(400).json({ error: `Valeur invalide pour ${key}.` });
+      }
+      next[key] = value;
+    }
+  }
+  if ("closedWeekdays" in body) {
+    if (!Array.isArray(body.closedWeekdays)) {
+      return res.status(400).json({ error: "Jours de fermeture invalides." });
+    }
+    next.closedWeekdays = [...new Set(body.closedWeekdays.map(Number))].filter(
+      (d) => d >= 0 && d <= 6
+    );
+  }
+  res.json({ settings: booking.saveSettings(next) });
 });
 
 /* ---------- site compilé (production) ---------- */

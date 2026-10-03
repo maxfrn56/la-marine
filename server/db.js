@@ -53,6 +53,42 @@ db.exec(`
     position INTEGER NOT NULL DEFAULT 0,
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS reservations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    code TEXT NOT NULL UNIQUE,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    service TEXT NOT NULL,
+    party_size INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL DEFAULT '',
+    phone TEXT NOT NULL,
+    notes TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'confirmed',
+    source TEXT NOT NULL DEFAULT 'web',
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    cancelled_at TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS slot_blocks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,
+    service TEXT,
+    time TEXT,
+    reason TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_reservations_day
+    ON reservations (date, service, status);
+  CREATE INDEX IF NOT EXISTS idx_blocks_day
+    ON slot_blocks (date);
 `);
 
 /* ---------- mots de passe (scrypt, sans dépendance native) ---------- */

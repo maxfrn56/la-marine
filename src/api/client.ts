@@ -1,4 +1,15 @@
-import type { Admin, Category, Cocktail, Dish } from "./types";
+import type {
+  Admin,
+  BookingConfig,
+  BookingSettings,
+  BookingSlot,
+  Category,
+  Cocktail,
+  DayOverview,
+  Dish,
+  Reservation,
+  SlotBlock,
+} from "./types";
 
 export class ApiError extends Error {}
 
@@ -77,3 +88,66 @@ export async function uploadPhoto(file: File) {
   form.append("photo", file);
   return request<{ url: string }>("/api/admin/upload", { method: "POST", body: form });
 }
+
+/* ---------- réservations ---------- */
+
+export const bookingConfig = () => request<BookingConfig>("/api/reservations/config");
+
+export const bookingAvailability = (date: string, party: number) =>
+  request<{ date: string; party: number; closed: boolean; slots: BookingSlot[] }>(
+    `/api/reservations/availability?date=${date}&party=${party}`
+  );
+
+export const createReservation = (data: {
+  date: string;
+  time: string;
+  partySize: number;
+  name: string;
+  email: string;
+  phone: string;
+  notes?: string;
+  website?: string;
+}) =>
+  request<{ reservation: Reservation; emailSent: boolean }>("/api/reservations", {
+    method: "POST",
+    body: body(data),
+  });
+
+export const adminDay = (date: string) =>
+  request<DayOverview>(`/api/admin/reservations?date=${date}`);
+
+export const adminCreateReservation = (data: {
+  date: string;
+  time: string;
+  partySize: number;
+  name: string;
+  email?: string;
+  phone: string;
+  notes?: string;
+}) =>
+  request<{ reservation: Reservation }>("/api/admin/reservations", {
+    method: "POST",
+    body: body(data),
+  });
+
+export const adminCancelReservation = (id: number) =>
+  request<{ reservation: Reservation }>(`/api/admin/reservations/${id}/cancel`, {
+    method: "POST",
+  });
+
+export const adminAddBlock = (data: {
+  date: string;
+  service?: "midi" | "soir" | null;
+  time?: string | null;
+  reason?: string;
+}) => request<{ block: SlotBlock }>("/api/admin/blocks", { method: "POST", body: body(data) });
+
+export const adminRemoveBlock = (id: number) =>
+  request<{ ok: true }>(`/api/admin/blocks/${id}`, { method: "DELETE" });
+
+export const adminBookingSettings = (data: Partial<BookingSettings>) =>
+  request<{ settings: BookingSettings }>("/api/admin/booking-settings", {
+    method: "PATCH",
+    body: body(data),
+  });
+

@@ -7,12 +7,14 @@ import { useAuth } from "./authContext";
 import { useContent } from "../content/context";
 import ItemForm, { type CocktailDraft, type DishDraft } from "./ItemForm";
 import AccountForm from "./AccountForm";
+import AdminReservations from "./AdminReservations";
 import logo from "../assets/photos/logo.png";
 import "./Admin.css";
 
-type Tab = "carte" | "cocktails" | "compte";
+type Tab = "reservations" | "carte" | "cocktails" | "compte";
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: "reservations", label: "Réservations" },
   { id: "carte", label: "La carte" },
   { id: "cocktails", label: "Les cocktails" },
   { id: "compte", label: "Mon compte" },
@@ -83,7 +85,7 @@ export default function AdminDashboard() {
   const { admin, signOut } = useAuth();
   const { refresh } = useContent();
 
-  const [tab, setTab] = useState<Tab>("carte");
+  const [tab, setTab] = useState<Tab>("reservations");
   const [categories, setCategories] = useState<Category[]>([]);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
@@ -237,6 +239,7 @@ export default function AdminDashboard() {
       </header>
 
       <div className="admin-body container">
+        {tab !== "reservations" && (
         <ul className="admin-stats">
           {stats.map((stat) => (
             <li key={stat.label}>
@@ -245,6 +248,7 @@ export default function AdminDashboard() {
             </li>
           ))}
         </ul>
+        )}
 
         <nav className="admin-tabs">
           {TABS.map((item) => (
@@ -260,7 +264,9 @@ export default function AdminDashboard() {
         </nav>
 
         {error && <p className="admin-inline-error">{error}</p>}
-        {loading && <p className="admin-loading">Chargement…</p>}
+        {loading && tab !== "reservations" && <p className="admin-loading">Chargement…</p>}
+
+        {tab === "reservations" && <AdminReservations onFlash={setFlash} />}
 
         {/* ---------- onglet carte ---------- */}
         {tab === "carte" && !loading && (

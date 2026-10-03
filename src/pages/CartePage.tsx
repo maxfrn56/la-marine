@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import PageTransition from "../components/PageTransition";
 import PageHeader from "../components/PageHeader";
 import { useContent } from "../content/context";
+import { useReservation } from "../reservations/context";
 import type { Category, Dish } from "../api/types";
 import carpaccio from "../assets/photos/carpaccio.png";
 import entreeVerte from "../assets/photos/entree-verte.png";
@@ -75,6 +76,7 @@ function MenuSection({
 
 export default function CartePage() {
   const { categories, dishesOf, loading, error } = useContent();
+  const { open } = useReservation();
   const bandRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: bandRef,
@@ -158,9 +160,9 @@ export default function CartePage() {
         >
           <p className="script">« On ne cuisine que ce que la mer veut bien nous donner. »</p>
           <span>— La cuisine de La Marine</span>
-          <a href="tel:0297500981" className="carte-page-cta">
+          <button type="button" className="carte-page-cta" onClick={open}>
             Réserver une table
-          </a>
+          </button>
         </motion.div>
       </div>
     </PageTransition>

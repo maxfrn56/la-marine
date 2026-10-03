@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import CartePage from "./pages/CartePage";
 import CocktailsPage from "./pages/CocktailsPage";
 import HistoirePage from "./pages/HistoirePage";
+import { ReservationProvider } from "./reservations/ReservationProvider";
 
 function AnimatedRoutes({ started }: { started: boolean }) {
   const location = useLocation();
@@ -71,7 +72,7 @@ export default function PublicSite() {
   }, [loaded]);
 
   return (
-    <>
+    <ReservationProvider>
       <Preloader onComplete={() => setLoaded(true)} />
       <ScrollReset lenis={lenis} />
       <Nav />
@@ -79,6 +80,6 @@ export default function PublicSite() {
         <AnimatedRoutes started={loaded} />
       </main>
       <Footer />
-    </>
+    </ReservationProvider>
   );
 }
