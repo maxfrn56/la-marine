@@ -77,18 +77,26 @@ export default function Footer() {
       </div>
 
       <div className="container footer-bottom">
-        <img src={logo} alt="Logo La Marine" className="footer-logo" />
-        <p>
-          © 1915 – 2026 La Marine, Quiberon.
-          {" · "}
-          <Link to="/mentions-legales" className="footer-admin">
+        <div className="footer-meta">
+          <img src={logo} alt="Logo La Marine" className="footer-logo" />
+          <button
+            type="button"
+            className="footer-up"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            Retour en haut ↑
+          </button>
+        </div>
+        <div className="footer-legal">
+          <Link to="/mentions-legales" className="footer-admin footer-legal-left">
             Mentions légales
           </Link>
-          {" · "}
-          <Link to="/admin" className="footer-admin">
+          <p className="footer-legal-center">© 1915 – 2026 La Marine, Quiberon.</p>
+          <Link to="/admin" className="footer-admin footer-legal-right">
             Espace restaurateur
           </Link>
-          <br />
+        </div>
+        <p className="footer-credit">
           Développé et designé par{" "}
           <a
             href="https://www.maximefarineau.com/"
@@ -99,13 +107,6 @@ export default function Footer() {
             Maxime Farineau
           </a>
         </p>
-        <button
-          type="button"
-          className="footer-up"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          Retour en haut ↑
-        </button>
       </div>
     </footer>
   );
