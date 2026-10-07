@@ -4,7 +4,7 @@ import PageTransition from "../components/PageTransition";
 import PageHeader from "../components/PageHeader";
 import { useContent } from "../content/context";
 import { cocktailImage } from "../content/images";
-import ginTonic from "../assets/photos/gin-tonic.png";
+import caveGin from "../assets/photos/cave-gin.jpg";
 import equipeBar from "../assets/photos/equipe-bar.png";
 import "./CocktailsPage.css";
 
@@ -99,7 +99,7 @@ export default function CocktailsPage() {
               viewport={{ once: true, margin: "-10% 0px" }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
-              <img src={ginTonic} alt="Gin tonic à L'Acrobate et tonic Hysope" />
+              <img src={caveGin} alt="Monkey 47 et tonic Archibald, à la cave à gins" />
             </motion.figure>
 
             <div className="cocktails-gin-text">
