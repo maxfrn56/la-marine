@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import facade from "../assets/photos/facade.png";
+import facade from "../assets/photos/facade-jour.jpg";
 import equipeSalle from "../assets/photos/equipe-salle.png";
 import "./Histoire.css";
 

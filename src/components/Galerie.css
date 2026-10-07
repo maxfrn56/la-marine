@@ -50,6 +50,10 @@
   aspect-ratio: 4 / 3;
 }
 
+.galerie-item--panorama .galerie-item-frame {
+  aspect-ratio: 21 / 8;
+}
+
 .galerie-item img {
   width: 100%;
   height: 100%;

@@ -6,12 +6,16 @@ import bar from "../assets/photos/bar.jpg";
 import tableRonde from "../assets/photos/table-ronde.jpg";
 import tableCopains from "../assets/photos/table-des-copains.jpg";
 import claustra from "../assets/photos/claustra.jpg";
+import facadeJour from "../assets/photos/facade-jour.jpg";
+import facadeNuit from "../assets/photos/facade-nuit.jpg";
 import equipeBar from "../assets/photos/equipe-bar.png";
 import cocktailFraise from "../assets/photos/cocktail-fraise.png";
 import equipeSalle from "../assets/photos/equipe-salle.png";
 import "./Galerie.css";
 
 const photos = [
+  { src: facadeJour, caption: "Le quai, en plein jour", wide: true },
+  { src: facadeNuit, caption: "La Marine, le soir venu", wide: true, panorama: true },
   { src: salon, caption: "La salle, Port Maria 1915", wide: true },
   { src: bar, caption: "Le comptoir et sa cloche", wide: false },
   { src: salle, caption: "La salle & ses cartes marines", wide: true },
@@ -26,7 +30,7 @@ const photos = [
 export default function Galerie() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref });
-  const x = useTransform(scrollYProgress, [0, 1], ["2%", "-78%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["2%", "-84%"]);
 
   return (
     <div className="galerie" id="galerie" ref={ref}>
@@ -42,7 +46,9 @@ export default function Galerie() {
           {photos.map((photo) => (
             <figure
               key={photo.caption}
-              className={`galerie-item ${photo.wide ? "galerie-item--wide" : ""}`}
+                  className={`galerie-item ${photo.wide ? "galerie-item--wide" : ""}${
+                    "panorama" in photo && photo.panorama ? " galerie-item--panorama" : ""
+                  }`}
             >
               <div className="galerie-item-frame">
                 <img src={photo.src} alt={photo.caption} />

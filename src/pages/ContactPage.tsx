@@ -4,7 +4,7 @@ import PageTransition from "../components/PageTransition";
 import PageHeader from "../components/PageHeader";
 import { sendContact } from "../api/client";
 import { useReservation } from "../reservations/context";
-import facade from "../assets/photos/facade.png";
+import facade from "../assets/photos/facade-jour.jpg";
 import "./ContactPage.css";
 
 const TOPICS = [
