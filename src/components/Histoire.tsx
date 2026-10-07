@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import facade from "../assets/photos/facade-jour.jpg";
+import salon from "../assets/photos/salon.jpg";
 import equipeSalle from "../assets/photos/equipe-salle.png";
 import "./Histoire.css";
 
@@ -95,8 +95,8 @@ export default function Histoire() {
       <div className="histoire-grid">
         <motion.div className="histoire-img" ref={imgRef} style={{ rotate }}>
           <motion.img
-            src={facade}
-            alt="Façade du bistrot La Marine sur le quai de l'Océan"
+            src={salon}
+            alt="La salle de La Marine, Port Maria"
             style={{ y }}
           />
           <figcaption>20 quai de l’Océan — Port Maria</figcaption>
