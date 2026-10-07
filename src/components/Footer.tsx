@@ -88,6 +88,16 @@ export default function Footer() {
           <Link to="/admin" className="footer-admin">
             Espace restaurateur
           </Link>
+          <br />
+          Développé et designé par{" "}
+          <a
+            href="https://www.maximefarineau.com/"
+            className="footer-admin"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Maxime Farineau
+          </a>
         </p>
         <button
           type="button"
