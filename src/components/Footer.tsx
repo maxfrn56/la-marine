@@ -79,7 +79,11 @@ export default function Footer() {
       <div className="container footer-bottom">
         <img src={logo} alt="Logo La Marine" className="footer-logo" />
         <p>
-          © 1915 – 2026 La Marine, Quiberon. Maquette de démonstration.
+          © 1915 – 2026 La Marine, Quiberon.
+          {" · "}
+          <Link to="/mentions-legales" className="footer-admin">
+            Mentions légales
+          </Link>
           {" · "}
           <Link to="/admin" className="footer-admin">
             Espace restaurateur

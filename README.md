@@ -120,7 +120,7 @@ src/
   content/     ContentProvider : charge la carte et la diffuse au site
   admin/       connexion et dashboard
   reservations/ module de réservation public (bouton + panneau)
-  pages/       Accueil, La carte, Cocktails, Histoire, Contact
+  pages/       Accueil, La carte, Cocktails, Histoire, Contact, Mentions
   components/  sections et éléments d’interface du site
 ```
 

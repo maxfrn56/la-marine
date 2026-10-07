@@ -10,6 +10,7 @@ import CartePage from "./pages/CartePage";
 import CocktailsPage from "./pages/CocktailsPage";
 import HistoirePage from "./pages/HistoirePage";
 import ContactPage from "./pages/ContactPage";
+import MentionsPage from "./pages/MentionsPage";
 import { ReservationProvider } from "./reservations/ReservationProvider";
 
 function AnimatedRoutes({ started }: { started: boolean }) {
@@ -23,6 +24,7 @@ function AnimatedRoutes({ started }: { started: boolean }) {
         <Route path="/cocktails" element={<CocktailsPage />} />
         <Route path="/histoire" element={<HistoirePage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/mentions-legales" element={<MentionsPage />} />
       </Routes>
     </AnimatePresence>
   );
