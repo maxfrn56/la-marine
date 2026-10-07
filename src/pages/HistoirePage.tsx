@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import PageTransition from "../components/PageTransition";
 import PageHeader from "../components/PageHeader";
-import facade from "../assets/photos/facade.png";
 import salle from "../assets/photos/salle.png";
+import tableCopains from "../assets/photos/table-des-copains.jpg";
 import equipeSalle from "../assets/photos/equipe-salle.png";
 import logo from "../assets/photos/logo.png";
 import "./HistoirePage.css";
@@ -45,8 +45,8 @@ const etapes: Etape[] = [
     year: "2017",
     title: "Un coup de peinture, pas de lifting",
     text: "Grande rénovation : façade bleu nuit, salle habillée de cartes marines et de casiers. L’âme reste intacte — le thon sculpté veille toujours sur le bar.",
-    image: facade,
-    imageAlt: "La façade bleu nuit de La Marine",
+    image: tableCopains,
+    imageAlt: "La grande table ronde de la salle rénovée, face au tableau des vagues",
   },
   {
     year: "2026",

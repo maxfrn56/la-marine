@@ -227,7 +227,7 @@ export default function AdminDashboard() {
 
         <div className="admin-head-right">
           <span className="admin-who">
-            Bonjour <strong>{admin?.name}</strong>
+            Bonjour <strong>David et Sabrina</strong>
           </span>
           <Link to="/" className="admin-btn admin-btn--ghost">
             Voir le site

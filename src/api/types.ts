@@ -112,6 +112,9 @@ export type DayOverview = {
   blocks: SlotBlock[];
   midi: DayService;
   soir: DayService;
+  archiveFrom: string;
+  archiveTo: string;
+  today: string;
   upcoming: { date: string; midi: number; soir: number; tables: number }[];
 };
 

@@ -89,6 +89,21 @@ export async function uploadPhoto(file: File) {
   return request<{ url: string }>("/api/admin/upload", { method: "POST", body: form });
 }
 
+/* ---------- contact ---------- */
+
+export const sendContact = (data: {
+  name: string;
+  email: string;
+  phone: string;
+  topic: string;
+  message: string;
+  website?: string;
+}) =>
+  request<{ ok: true; emailSent: boolean }>("/api/contact", {
+    method: "POST",
+    body: body(data),
+  });
+
 /* ---------- réservations ---------- */
 
 export const bookingConfig = () => request<BookingConfig>("/api/reservations/config");

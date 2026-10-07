@@ -26,6 +26,9 @@ export default function Footer() {
           <button type="button" className="footer-phone" onClick={open}>
             Réserver une table
           </button>
+          <Link to="/contact" className="footer-phone footer-phone--ghost">
+            Une demande particulière ?
+          </Link>
           <a href="tel:0297500981" className="footer-phone footer-phone--ghost">
             02 97 50 09 81
           </a>

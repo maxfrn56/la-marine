@@ -21,7 +21,7 @@ import db, {
   verifyPassword,
 } from "./db.js";
 import * as booking from "./booking.js";
-import { sendCancellation, sendConfirmation } from "./mail.js";
+import { CONTACT_TOPICS, sendCancellation, sendConfirmation, sendContact } from "./mail.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 4000);
@@ -425,6 +425,64 @@ function tooManyBookings(ip) {
   return false;
 }
 
+const contactHitsByIp = new Map();
+function tooManyContacts(ip) {
+  const now = Date.now();
+  const prev = (contactHitsByIp.get(ip) ?? []).filter((t) => now - t < 60 * 60 * 1000);
+  if (prev.length >= 5) {
+    contactHitsByIp.set(ip, prev);
+    return true;
+  }
+  prev.push(now);
+  contactHitsByIp.set(ip, prev);
+  return false;
+}
+
+function parseContact(body) {
+  const name = String(body.name ?? "").trim();
+  const email = String(body.email ?? "").trim();
+  const phone = String(body.phone ?? "").trim();
+  const topic = String(body.topic ?? "").trim();
+  const message = String(body.message ?? "").trim();
+  if (name.length < 2) throw new Error("Indiquez votre nom.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("L’e-mail n’est pas valide.");
+  if (phone.replace(/\D/g, "").length < 8) {
+    throw new Error("Un numéro de téléphone valide est obligatoire.");
+  }
+  if (!CONTACT_TOPICS[topic]) throw new Error("Choisissez l’objet de votre demande.");
+  if (message.length < 10) throw new Error("Précisez un peu votre demande.");
+  if (message.length > 2500) throw new Error("Le message est trop long.");
+  return { name, email, phone, topic, message };
+}
+
+app.post("/api/contact", async (req, res) => {
+  if (req.body?.website) return res.status(201).json({ ok: true });
+  const ip = req.ip ?? req.socket?.remoteAddress ?? "unknown";
+  if (tooManyContacts(ip)) {
+    return res.status(429).json({ error: "Trop de messages. Réessayez dans un moment, ou appelez-nous." });
+  }
+  let payload;
+  try {
+    payload = parseContact(req.body ?? {});
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+  try {
+    const result = await sendContact(payload);
+    if (!result.restaurant) {
+      return res.status(503).json({
+        error: "Le message n’a pas pu partir. Appelez-nous au 02 97 50 09 81.",
+      });
+    }
+    res.status(201).json({ ok: true, emailSent: result.guest });
+  } catch (err) {
+    console.error("Contact :", err.message);
+    res.status(503).json({
+      error: "Le message n’a pas pu partir. Appelez-nous au 02 97 50 09 81.",
+    });
+  }
+});
+
 app.get("/api/reservations/config", (_req, res) => {
   res.json(booking.publicConfig());
 });
@@ -465,12 +523,15 @@ app.post("/api/reservations", async (req, res) => {
 });
 
 app.get("/api/admin/reservations", requireAuth, (req, res) => {
-  const date = booking.isValidDate(String(req.query.date ?? ""))
-    ? String(req.query.date)
-    : booking.todayParis();
+  booking.purgeExpired();
+  const window = booking.archiveWindow();
+  const date = booking.clampAdminDate(String(req.query.date ?? ""));
   res.json({
     ...booking.dayOverview(date),
-    upcoming: booking.upcomingCounts(booking.todayParis(), 14),
+    archiveFrom: window.from,
+    archiveTo: window.to,
+    today: window.today,
+    upcoming: booking.upcomingCounts(date, 7),
   });
 });
 
@@ -557,6 +618,7 @@ if (existsSync(DIST)) {
 }
 
 sweepOrphanUploads();
+booking.purgeExpired();
 
 app.listen(PORT, () => {
   console.log(`API La Marine → http://localhost:${PORT}`);

@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import CartePage from "./pages/CartePage";
 import CocktailsPage from "./pages/CocktailsPage";
 import HistoirePage from "./pages/HistoirePage";
+import ContactPage from "./pages/ContactPage";
 import { ReservationProvider } from "./reservations/ReservationProvider";
 
 function AnimatedRoutes({ started }: { started: boolean }) {
@@ -21,6 +22,7 @@ function AnimatedRoutes({ started }: { started: boolean }) {
         <Route path="/carte" element={<CartePage />} />
         <Route path="/cocktails" element={<CocktailsPage />} />
         <Route path="/histoire" element={<HistoirePage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </AnimatePresence>
   );
@@ -76,11 +78,11 @@ export default function PublicSite() {
   useEffect(() => {
     if (!lenis) return;
     const sync = () => {
-      if (document.documentElement.classList.contains("booking-open")) {
-        lenis.stop();
-      } else {
-        lenis.start();
-      }
+      const locked =
+        document.documentElement.classList.contains("booking-open") ||
+        document.documentElement.classList.contains("nav-open");
+      if (locked) lenis.stop();
+      else lenis.start();
     };
     sync();
     const observer = new MutationObserver(sync);

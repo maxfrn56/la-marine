@@ -1,18 +1,24 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import salle from "../assets/photos/salle.png";
-import facade from "../assets/photos/facade.png";
-import carpaccio from "../assets/photos/carpaccio.png";
+import salon from "../assets/photos/salon.jpg";
+import bar from "../assets/photos/bar.jpg";
+import tableRonde from "../assets/photos/table-ronde.jpg";
+import tableCopains from "../assets/photos/table-des-copains.jpg";
+import claustra from "../assets/photos/claustra.jpg";
 import equipeBar from "../assets/photos/equipe-bar.png";
 import cocktailFraise from "../assets/photos/cocktail-fraise.png";
 import equipeSalle from "../assets/photos/equipe-salle.png";
 import "./Galerie.css";
 
 const photos = [
+  { src: salon, caption: "La salle, Port Maria 1915", wide: true },
+  { src: bar, caption: "Le comptoir et sa cloche", wide: false },
   { src: salle, caption: "La salle & ses cartes marines", wide: true },
+  { src: tableRonde, caption: "Table ronde dressée", wide: false },
+  { src: tableCopains, caption: "La grande table des copains", wide: false },
+  { src: claustra, caption: "La table, derrière le claustra", wide: false },
   { src: cocktailFraise, caption: "Signature fraise, au comptoir", wide: false },
-  { src: facade, caption: "Quai de l’Océan, depuis 1915", wide: true },
-  { src: carpaccio, caption: "Lieu jaune en carpaccio", wide: false },
   { src: equipeBar, caption: "L’équipe du bar", wide: true },
   { src: equipeSalle, caption: "L’équipage en salle", wide: false },
 ];
@@ -20,7 +26,7 @@ const photos = [
 export default function Galerie() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref });
-  const x = useTransform(scrollYProgress, [0, 1], ["4%", "-64%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["2%", "-78%"]);
 
   return (
     <div className="galerie" id="galerie" ref={ref}>

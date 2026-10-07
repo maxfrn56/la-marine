@@ -1,8 +1,15 @@
 import { Resend } from "resend";
 
 const FROM = process.env.MAIL_FROM ?? "La Marine <beth.t@example.com>";
-const RESTAURANT = process.env.NOTIFY_EMAIL ?? process.env.ADMIN_EMAIL ?? "";
+const RESTAURANT =
+  process.env.NOTIFY_EMAIL ?? process.env.ADMIN_EMAIL ?? "lamarine1712@gmail.com";
 const KEY = process.env.RESEND_API_KEY ?? "";
+
+export const CONTACT_TOPICS = {
+  "grande-table": "Grande table",
+  reservation: "Réservation",
+  particulier: "Demande particulière",
+};
 
 const resend = KEY ? new Resend(KEY) : null;
 
@@ -78,7 +85,7 @@ async function send(message) {
   }
   const { error } = await resend.emails.send({
     from: FROM,
-    replyTo: RESTAURANT || undefined,
+    replyTo: message.replyTo || RESTAURANT || undefined,
     to: message.to,
     subject: message.subject,
     text: message.text,
@@ -115,6 +122,49 @@ export async function sendConfirmation(reservation) {
     results.restaurant = house.sent;
   }
   return results;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]
+  );
+}
+
+export async function sendContact({ name, email, phone, topic, message }) {
+  const topicLabel = CONTACT_TOPICS[topic] ?? topic;
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safePhone = escapeHtml(phone);
+  const safeMessage = escapeHtml(message).replace(/\n/g, "<br/>");
+  const house = await send({
+    to: RESTAURANT,
+    replyTo: email,
+    subject: `Contact La Marine — ${topicLabel} — ${name}`,
+    text: `${topicLabel}\n${name}\n${phone}\n${email}\n\n${message}`,
+    html: wrap(
+      "Un message du quai",
+      `<p style="margin:0 0 16px;"><strong style="color:#e6c47a;">${escapeHtml(topicLabel)}</strong></p>
+       <p style="margin:0 0 8px;">${safeName}<br/>${safePhone}<br/>${safeEmail}</p>
+       <p style="margin:18px 0 0;color:#d8cdb4;">${safeMessage}</p>`
+    ),
+  });
+  let guest = { sent: false };
+  try {
+    guest = await send({
+      to: email,
+      subject: "Votre message à La Marine",
+      text: `Nous avons bien reçu votre message (${topicLabel}). L’équipe de La Marine vous répondra dès que possible.`,
+      html: wrap(
+        "Nous avons bien reçu votre message",
+        `<p style="margin:0 0 18px;">Bonjour ${escapeHtml(name.split(" ")[0])},</p>
+         <p style="margin:0 0 18px;">Votre demande « ${escapeHtml(topicLabel)} » est bien arrivée au 20 Quai de l’Océan. Nous vous répondons dès que possible.</p>
+         <p style="margin:0;">Pour une table dans la journée, le plus simple reste de nous appeler au 02 97 50 09 81.</p>`
+      ),
+    });
+  } catch (err) {
+    console.error("Accusé de réception contact :", err.message);
+  }
+  return { restaurant: house.sent, guest: guest.sent };
 }
 
 export async function sendCancellation(reservation) {

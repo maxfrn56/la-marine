@@ -57,7 +57,7 @@ ce qui permet d’ouvrir directement `/carte` ou `/admin`.
    JWT_SECRET=<chaîne aléatoire longue>
    ADMIN_EMAIL=<e-mail du restaurateur>
    ADMIN_PASSWORD=<mot de passe solide>
-   ADMIN_NAME=David Le Ruyet
+   ADMIN_NAME=David et Sabrina
    RESEND_API_KEY=re_xxxxxxxx
    MAIL_FROM=La Marine <reservations@votredomaine.fr>
    NOTIFY_EMAIL=<e-mail du restaurant>
@@ -94,8 +94,10 @@ Depuis le dashboard, le restaurateur peut :
   tombe à environ 300 Ko)
 - masquer temporairement un élément sans le supprimer (rupture, hors saison)
 - mettre un élément « en vitrine » pour le faire apparaître sur l’accueil
-- consulter les réservations du jour, bloquer un créneau ou un service,
-  annuler une table, noter une réservation prise au téléphone
+- consulter les réservations (aujourd’hui, les 30 jours passés et l’horizon
+  à venir), bloquer un créneau ou un service, annuler une table, noter une
+  réservation prise au téléphone. Au-delà d’un mois, les tables sont
+  retirées du livre
 - régler la capacité midi / soir et les jours de fermeture
 
 Toute modification de la carte est immédiatement répercutée sur la page
@@ -109,7 +111,7 @@ server/
   index.js     API Express : session, CRUD, réservations, photos, dist/
   db.js        SQLite (schéma, amorçage, hachage des mots de passe)
   booking.js   Disponibilité, capacité, blocages de créneaux
-  mail.js      E-mails de confirmation et d’annulation
+  mail.js      E-mails de confirmation, d’annulation et de contact
   data/        base, secret de session et photos envoyées (hors dépôt,
                emplacement redéfinissable par DATA_DIR)
 
@@ -118,7 +120,7 @@ src/
   content/     ContentProvider : charge la carte et la diffuse au site
   admin/       connexion et dashboard
   reservations/ module de réservation public (bouton + panneau)
-  pages/       Accueil, La carte, Cocktails, Histoire
+  pages/       Accueil, La carte, Cocktails, Histoire, Contact
   components/  sections et éléments d’interface du site
 ```
 

@@ -157,7 +157,7 @@ function seed() {
     ).run(
       process.env.ADMIN_EMAIL ?? "lamarine1712@gmail.com",
       hashPassword(process.env.ADMIN_PASSWORD ?? "LaMarine1915"),
-      process.env.ADMIN_NAME ?? "David Le Ruyet"
+      process.env.ADMIN_NAME ?? "David et Sabrina"
     );
 
     if (!process.env.ADMIN_PASSWORD) {

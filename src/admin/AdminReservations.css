@@ -55,6 +55,10 @@
   background: rgba(201, 162, 75, 0.12);
 }
 
+.rsv-strip button.is-past strong {
+  color: var(--cream-dim);
+}
+
 .rsv-strip span {
   display: block;
   font-size: 10px;

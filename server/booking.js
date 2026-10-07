@@ -19,6 +19,9 @@ export const DEFAULT_SETTINGS = {
   closedWeekdays: [],
 };
 
+/** Nombre de jours passés conservés dans le livre de réservations. */
+export const HISTORY_DAYS = 30;
+
 const WEEKDAY_FROM_NAME = {
   Sun: 0,
   Mon: 1,
@@ -389,6 +392,34 @@ export function addBlock({ date, service = null, time = null, reason = "" }) {
 export function removeBlock(id) {
   const info = db.prepare("DELETE FROM slot_blocks WHERE id = ?").run(id);
   return info.changes > 0;
+}
+
+export function archiveWindow(today = todayParis()) {
+  const settings = getSettings();
+  return {
+    from: addDays(today, -HISTORY_DAYS),
+    to: addDays(today, settings.horizonDays),
+    today,
+  };
+}
+
+export function clampAdminDate(date) {
+  const { from, to, today } = archiveWindow();
+  if (!isValidDate(date)) return today;
+  if (date < from) return from;
+  if (date > to) return to;
+  return date;
+}
+
+/**
+ * Retire les réservations et blocages trop anciens : David garde un mois
+ * de recul, pas plus.
+ */
+export function purgeExpired(today = todayParis()) {
+  const cutoff = addDays(today, -HISTORY_DAYS);
+  const reservations = db.prepare("DELETE FROM reservations WHERE date < ?").run(cutoff);
+  const blocks = db.prepare("DELETE FROM slot_blocks WHERE date < ?").run(cutoff);
+  return { reservations: reservations.changes, blocks: blocks.changes, cutoff };
 }
 
 export function upcomingCounts(from, days = 14) {
