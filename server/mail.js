@@ -4,6 +4,11 @@ const FROM = process.env.MAIL_FROM ?? "La Marine <beth.t@example.com>";
 const RESTAURANT =
   process.env.NOTIFY_EMAIL ?? process.env.ADMIN_EMAIL ?? "lamarine1712@gmail.com";
 const KEY = process.env.RESEND_API_KEY ?? "";
+const SITE = (process.env.SITE_URL ?? "https://www.lamarine-quiberon.fr").replace(
+  /\/$/,
+  ""
+);
+const LOGO = `${SITE}/logo.png`;
 
 export const CONTACT_TOPICS = {
   "grande-table": "Grande table",
@@ -36,12 +41,14 @@ function wrap(title, body) {
       <td align="center">
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
           <tr>
-            <td style="padding:28px 8px 18px;text-align:center;letter-spacing:0.32em;font-size:11px;text-transform:uppercase;color:#c9a24b;font-family:Arial,sans-serif;">
-              20 Quai de l’Océan · Port Maria
+            <td style="padding:12px 8px 16px;text-align:center;">
+              <img src="${LOGO}" alt="La Marine" width="88" height="88" style="width:88px;height:88px;border-radius:50%;display:block;margin:0 auto;border:1px solid rgba(201,162,75,0.45);" />
             </td>
           </tr>
           <tr>
-            <td style="padding:0 8px 10px;text-align:center;font-size:34px;color:#f2ead8;">La Marine</td>
+            <td style="padding:0 8px 18px;text-align:center;letter-spacing:0.32em;font-size:11px;text-transform:uppercase;color:#c9a24b;font-family:Arial,sans-serif;">
+              20 Quai de l’Océan · Port Maria
+            </td>
           </tr>
           <tr>
             <td style="padding:0 8px 28px;text-align:center;font-size:18px;font-style:italic;color:#d8cdb4;">${title}</td>
@@ -105,7 +112,7 @@ export async function sendConfirmation(reservation) {
       html: wrap(
         "Votre table est retenue",
         `<p style="margin:0 0 18px;">Bonjour ${reservation.name.split(" ")[0]},</p>
-         <p style="margin:0 0 18px;">Nous avons le plaisir de vous confirmer votre table au plus vieux restaurant de Quiberon.</p>
+         <p style="margin:0 0 18px;">Nous avons le plaisir de vous confirmer votre table à La Marine.</p>
          ${details(reservation)}
          <p style="margin:22px 0 0;">À très bientôt sur le port,<br/>L’équipe de La Marine</p>`
       ),
