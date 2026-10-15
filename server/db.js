@@ -114,6 +114,7 @@ export const CATEGORIES = [
   { slug: "entrees", label: "Pour commencer", script: "Mise en bouche" },
   { slug: "ecailler", label: "L’écailler", script: "Vue sur le port" },
   { slug: "peche", label: "Le retour de pêche", script: "Selon la criée" },
+  { slug: "viandes", label: "Les viandes", script: "Côté terre" },
   { slug: "douceurs", label: "Douceurs", script: "Pour finir en beauté" },
 ];
 

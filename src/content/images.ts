@@ -13,6 +13,7 @@ const DISH_FALLBACKS: Record<string, string> = {
   entrees: entreeVerte,
   ecailler: logo,
   peche: carpaccio,
+  viandes: logo,
   douceurs: logo,
 };
 
