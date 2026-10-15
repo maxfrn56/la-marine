@@ -150,6 +150,24 @@ const SEED_COCKTAILS = [
 ];
 
 function seed() {
+  const volume = process.env.RAILWAY_VOLUME_MOUNT_PATH;
+  const production = process.env.NODE_ENV === "production";
+  const persistOk = Boolean(
+    process.env.DATA_DIR &&
+      (!volume || DATA_DIR === resolve(volume) || DATA_DIR.startsWith(`${resolve(volume)}/`))
+  );
+
+  console.log(
+    `[data] dossier=${DATA_DIR} volume=${volume ?? "aucun"} plats=${db.prepare("SELECT COUNT(*) AS n FROM dishes").get().n}`
+  );
+  if (production && !persistOk) {
+    console.error(
+      "⚠︎  Les données ne sont pas sur un volume persistant. " +
+        "Sur Railway : volume monté sur /data, variable DATA_DIR=/data. " +
+        "Sans cela, la carte est effacée à chaque redéploiement."
+    );
+  }
+
   const admins = db.prepare("SELECT COUNT(*) AS n FROM admins").get().n;
   if (admins === 0) {
     // Le compte n'est créé qu'au premier démarrage, depuis l'environnement.
@@ -169,8 +187,14 @@ function seed() {
     }
   }
 
+  // En production on n'injecte plus le menu de démo : une base vide
+  // (volume manquant, premier démarrage) ne doit pas écraser le travail
+  // du restaurateur avec les plats d'exemple.
+  const allowDemoMenu =
+    !production || process.env.SEED_MENU === "1";
+
   const dishes = db.prepare("SELECT COUNT(*) AS n FROM dishes").get().n;
-  if (dishes === 0) {
+  if (dishes === 0 && allowDemoMenu) {
     const insert = db.prepare(
       `INSERT INTO dishes (category, name, description, price, featured, position)
        VALUES (?, ?, ?, ?, ?, ?)`
@@ -186,7 +210,7 @@ function seed() {
   }
 
   const cocktails = db.prepare("SELECT COUNT(*) AS n FROM cocktails").get().n;
-  if (cocktails === 0) {
+  if (cocktails === 0 && allowDemoMenu) {
     const insert = db.prepare(
       `INSERT INTO cocktails (name, recipe, price, featured, position)
        VALUES (?, ?, ?, ?, ?)`
