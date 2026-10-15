@@ -1,13 +1,6 @@
-import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  AnimatePresence,
-} from "framer-motion";
+import { motion } from "framer-motion";
 import { useContent } from "../content/context";
-import { dishImage } from "../content/images";
 import "./Carte.css";
 
 /* La home met en avant les plats cochés « vitrine » dans le back-office. */
@@ -15,26 +8,12 @@ const MAX_ON_HOME = 5;
 
 export default function Carte() {
   const { featuredDishes, dishes, loading } = useContent();
-  const sectionRef = useRef<HTMLElement>(null);
-  const [active, setActive] = useState<number | null>(null);
-
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 120, damping: 18 });
-  const springY = useSpring(y, { stiffness: 120, damping: 18 });
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    const rect = sectionRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    x.set(e.clientX - rect.left);
-    y.set(e.clientY - rect.top);
-  };
 
   // Sans sélection vitrine, on retombe sur les premiers plats de la carte.
   const selection = (featuredDishes.length ? featuredDishes : dishes).slice(0, MAX_ON_HOME);
 
   return (
-    <section className="carte" id="carte" ref={sectionRef} onMouseMove={onMouseMove}>
+    <section className="carte" id="carte">
       <div className="container">
         <span className="section-label">La carte</span>
         <h2 className="carte-title">
@@ -48,11 +27,10 @@ export default function Carte() {
         {loading && !selection.length ? (
           <p className="carte-state">Chargement de la carte…</p>
         ) : (
-          <ul className="carte-list" onMouseLeave={() => setActive(null)}>
+          <ul className="carte-list">
             {selection.map((dish, i) => (
               <motion.li
                 key={dish.id}
-                onMouseEnter={() => setActive(i)}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-8% 0px" }}
@@ -73,27 +51,6 @@ export default function Carte() {
           Voir la carte complète <span aria-hidden>→</span>
         </Link>
       </div>
-
-      {/* aperçu du plat qui suit le curseur */}
-      <motion.div
-        className="carte-preview"
-        style={{ x: springX, y: springY }}
-        aria-hidden
-      >
-        <AnimatePresence mode="popLayout">
-          {active !== null && selection[active] && (
-            <motion.img
-              key={selection[active].id}
-              src={dishImage(selection[active])}
-              alt=""
-              initial={{ opacity: 0, scale: 0.7, rotate: -6 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, scale: 0.7, rotate: 6 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            />
-          )}
-        </AnimatePresence>
-      </motion.div>
     </section>
   );
 }

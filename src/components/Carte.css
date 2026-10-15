@@ -92,29 +92,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- aperçu flottant ---------- */
-
-.carte-preview {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-  pointer-events: none;
-  margin: -130px 0 0 40px;
-}
-
-.carte-preview img {
-  width: 240px;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
-}
-
 @media (max-width: 800px) {
-  .carte-preview {
-    display: none;
-  }
   .carte-list li {
     grid-template-columns: 1fr auto;
   }
