@@ -74,8 +74,28 @@ html.booking-open .book-fab {
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 36px;
+  padding-bottom: 20px;
   touch-action: pan-y;
+}
+
+.book-credit {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 12px 0 calc(14px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(242, 234, 216, 0.1);
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--cream-dim);
+  background: var(--navy-950);
+}
+
+.book-credit a {
+  color: var(--gold);
+}
+
+.book-credit a:hover {
+  color: var(--gold-bright);
 }
 
 .book-head {

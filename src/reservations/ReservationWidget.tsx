@@ -381,6 +381,16 @@ export default function ReservationWidget() {
                 </form>
               )}
               </div>
+              <p className="book-credit">
+                Développé par{" "}
+                <a
+                  href="https://www.maximefarineau.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Maxime Farineau
+                </a>
+              </p>
             </motion.aside>
           </motion.div>
         )}
